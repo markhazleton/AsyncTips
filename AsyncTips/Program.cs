@@ -1,17 +1,17 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace AsyncTips
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             ExecuteTaskAsync().Wait();
 
             ExecuteTaskWithTimeoutAsync(TimeSpan.FromSeconds(2)).Wait();
-            ExecuteTaskWithTimeoutAsync(TimeSpan.FromSeconds(6)).Wait();
+            ExecuteTaskWithTimeoutAsync(TimeSpan.FromSeconds(10)).Wait();
 
             ExecuteManuallyCancellableTaskAsync().Wait();
             ExecuteManuallyCancellableTaskAsync().Wait();
@@ -24,7 +24,7 @@ namespace AsyncTips
         /// </summary>
         /// <returns>The value computed.</returns>
         /// <param name="loop">Number of iterations to do.</param>
-        private static Task<decimal> LongRunningOperation(int loop)
+        public static Task<decimal> LongRunningOperation(int loop)
         {
             // Start a task a return it
             return Task.Run(() =>
@@ -167,7 +167,6 @@ namespace AsyncTips
                 // Set the taskCompletionSource result
                 taskCompletionSource.TrySetResult(result);
             }
-
             // Return the result of the TaskCompletionSource.Task
             return await taskCompletionSource.Task;
         }
@@ -175,7 +174,6 @@ namespace AsyncTips
         public static async Task CancelANonCancellableTaskAsync()
         {
             Console.WriteLine(nameof(CancelANonCancellableTaskAsync));
-
             using (var cancellationTokenSource = new CancellationTokenSource())
             {
                 // Listening to key press to cancel
@@ -183,7 +181,6 @@ namespace AsyncTips
                 {
                     Console.WriteLine("Press enter to cancel");
                     Console.ReadKey();
-
                     // Sending the cancellation message
                     cancellationTokenSource.Cancel();
                 });
@@ -193,7 +190,6 @@ namespace AsyncTips
                     // Running the long running task
                     var longRunningTask = LongRunningOperationWithCancellationTokenAsync(100, cancellationTokenSource.Token);
                     var result = await longRunningTask;
-
                     Console.WriteLine("Result {0}", result);
                     Console.WriteLine("Press enter to continue");
                 }
@@ -201,7 +197,6 @@ namespace AsyncTips
                 {
                     Console.WriteLine("Task was cancelled");
                 }
-
                 await keyBoardTask;
             }
         }
