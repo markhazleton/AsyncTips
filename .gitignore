@@ -1,6 +1,9 @@
 # Autosave files
 *~
 
+# Visual Studio
+.vs/
+
 # build
 [Oo]bj/
 [Bb]in/
@@ -40,5 +43,7 @@ Thumbs.db
 *.dotCover
 
 *.db
+
+
 
 sources/.vs/EfficientApiCalls/xs/UserPrefs.xml
