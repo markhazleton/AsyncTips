@@ -36,7 +36,7 @@ namespace AsyncTips
                 {
                     // Running the long running task
                     var longRunningTask = asyncDemo.LongRunningOperationWithCancellationTokenAsync(100,
-                                                                                                   cancellationTokenSource.Token);
+                                                                                                   cancellationTokenSource.Token).ConfigureAwait(false);
                     var result = await longRunningTask;
                     Console.WriteLine("Result {0}", result);
                     Console.WriteLine("Press enter to continue");
@@ -67,7 +67,7 @@ namespace AsyncTips
 
                 try
                 {
-                    var longRunningTask = asyncDemo.LongRunningCancellableOperation(500, cancellationTokenSource.Token);
+                    var longRunningTask = asyncDemo.LongRunningCancellableOperation(500, cancellationTokenSource.Token).ConfigureAwait(false);
 
                     var result = await longRunningTask;
                     Console.WriteLine("Result {0}", result);
@@ -85,7 +85,7 @@ namespace AsyncTips
         private static async Task ExecuteTaskAsync()
         {
             Console.WriteLine(nameof(ExecuteTaskAsync));
-            Console.WriteLine("Result {0}", await asyncDemo.LongRunningOperation(100));
+            Console.WriteLine("Result {0}", await asyncDemo.LongRunningOperation(100).ConfigureAwait(false));
             Console.WriteLine("Press enter to continue");
             Console.ReadLine();
         }
@@ -99,7 +99,7 @@ namespace AsyncTips
             {
                 try
                 {
-                    var result = await asyncDemo.LongRunningCancellableOperation(500, cancellationTokenSource.Token);
+                    var result = await asyncDemo.LongRunningCancellableOperation(500, cancellationTokenSource.Token).ConfigureAwait(false);
                     Console.WriteLine("Result {0}", result);
                 }
                 catch (TaskCanceledException)
