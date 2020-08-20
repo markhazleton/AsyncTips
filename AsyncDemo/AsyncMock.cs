@@ -1,14 +1,14 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace AsyncTips
+namespace AsyncDemo
 {
     /// <summary>
     /// Samples for Async Methods 
     /// Supporting Video: https://channel9.msdn.com/Series/Three-Essential-Tips-for-Async/Three-Essential-Tips-For-Async-Introduction
     /// Supporting Blog: https://johnthiriet.com/configure-await/
     /// </summary>
-    public class AsyncDemo
+    public class AsyncMock
     {
         /// <summary>
         /// Compute a value for a long time.

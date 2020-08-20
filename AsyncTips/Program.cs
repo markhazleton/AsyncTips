@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AsyncDemo;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -6,7 +7,7 @@ namespace AsyncTips
 {
     internal class Program
     {
-        private static readonly AsyncDemo asyncDemo = new AsyncDemo();
+        private static readonly AsyncMock asyncMock = new AsyncMock();
 
         public static void Main(string[] args)
         {
@@ -35,7 +36,7 @@ namespace AsyncTips
                 try
                 {
                     // Running the long running task
-                    var longRunningTask = asyncDemo.LongRunningOperationWithCancellationTokenAsync(100,
+                    var longRunningTask = asyncMock.LongRunningOperationWithCancellationTokenAsync(100,
                                                                                                    cancellationTokenSource.Token).ConfigureAwait(false);
                     var result = await longRunningTask;
                     Console.WriteLine("Result {0}", result);
@@ -52,7 +53,6 @@ namespace AsyncTips
         private static async Task ExecuteManuallyCancellableTaskAsync()
         {
             Console.WriteLine(nameof(ExecuteManuallyCancellableTaskAsync));
-
             using (var cancellationTokenSource = new CancellationTokenSource())
             {
                 // Creating a task to listen to keyboard key press
@@ -60,15 +60,13 @@ namespace AsyncTips
                 {
                     Console.WriteLine("Press enter to cancel");
                     Console.ReadKey();
-
                     // Cancel the task
                     cancellationTokenSource.Cancel();
                 });
 
                 try
                 {
-                    var longRunningTask = asyncDemo.LongRunningCancellableOperation(500, cancellationTokenSource.Token).ConfigureAwait(false);
-
+                    var longRunningTask = asyncMock.LongRunningCancellableOperation(500, cancellationTokenSource.Token).ConfigureAwait(false);
                     var result = await longRunningTask;
                     Console.WriteLine("Result {0}", result);
                     Console.WriteLine("Press enter to continue");
@@ -77,7 +75,6 @@ namespace AsyncTips
                 {
                     Console.WriteLine("Task was cancelled");
                 }
-
                 await keyBoardTask;
             }
         }
@@ -85,7 +82,7 @@ namespace AsyncTips
         private static async Task ExecuteTaskAsync()
         {
             Console.WriteLine(nameof(ExecuteTaskAsync));
-            Console.WriteLine("Result {0}", await asyncDemo.LongRunningOperation(100).ConfigureAwait(false));
+            Console.WriteLine("Result {0}", await asyncMock.LongRunningOperation(100).ConfigureAwait(false));
             Console.WriteLine("Press enter to continue");
             Console.ReadLine();
         }
@@ -94,12 +91,11 @@ namespace AsyncTips
         private static async Task ExecuteTaskWithTimeoutAsync(TimeSpan timeSpan)
         {
             Console.WriteLine(nameof(ExecuteTaskWithTimeoutAsync));
-
             using (var cancellationTokenSource = new CancellationTokenSource(timeSpan))
             {
                 try
                 {
-                    var result = await asyncDemo.LongRunningCancellableOperation(500, cancellationTokenSource.Token).ConfigureAwait(false);
+                    var result = await asyncMock.LongRunningCancellableOperation(500, cancellationTokenSource.Token).ConfigureAwait(false);
                     Console.WriteLine("Result {0}", result);
                 }
                 catch (TaskCanceledException)
