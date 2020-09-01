@@ -4,24 +4,24 @@
   "libraries": [
 
     {
-      "provider": "cdnjs",
+      "destination": "wwwroot/lib/jquery/",
       "library": "jquery@3.5.1",
-      "destination": "wwwroot/lib/jquery/"
+      "provider": "cdnjs"
     },
     {
-      "provider": "cdnjs",
+      "destination": "wwwroot/lib/jqueryui/",
       "library": "jqueryui@1.12.1",
-      "destination": "wwwroot/lib/jqueryui/"
+      "provider": "cdnjs"
     },
     {
-      "provider": "cdnjs",
+      "destination": "wwwroot/lib/jquery-validation-unobtrusive/",
       "library": "jquery-validation-unobtrusive@3.2.11",
-      "destination": "wwwroot/lib/jquery-validation-unobtrusive/"
+      "provider": "cdnjs"
     },
     {
-      "provider": "unpkg",
+      "destination": "wwwroot/lib/bootstrap/",
       "library": "bootstrap@4.5.2",
-      "destination": "wwwroot/lib/bootstrap/"
+      "provider": "unpkg"
     }
   ]
 }
