@@ -1,8 +1,27 @@
-﻿@{
+﻿@model string 
+@{
+    string sDisplay = Model;
+
+    if (Model == null)
+        sDisplay = "Model Was Null";
+
     ViewData["Title"] = "Async Web Demo Home Page";
 }
 
 <div class="text-center">
     <h1 class="display-4">Async Web Demo</h1>
-    <p>More information about <a target="_blank" href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h2>@{ @Html.Raw(sDisplay) }</h2>
+    <p>
+        Test the Asyc Calls
+        <ul>
+            <li><a href="/home/index?loopCount=35&maxTimeMs=1500">35 Loops, max 1.5 seconds</a></li>
+            <li><a href="/home/index?loopCount=35&maxTimeMs=1000">35 Loops, max 1 second</a></li>
+            <li><a href="/home/index?loopCount=35&maxTimeMs=500">35 Loops, max 1/2 second</a></li>
+        </ul>
+    </p>
+
+
+
+
+
 </div>

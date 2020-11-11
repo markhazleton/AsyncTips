@@ -3,6 +3,7 @@ using AsyncWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -12,8 +13,8 @@ namespace AsyncWeb.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly AsyncMock asyncMock = new AsyncMock();
+        private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger) { _logger = logger; }
 
@@ -21,39 +22,64 @@ namespace AsyncWeb.Controllers
         public IActionResult Error()
         { return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier }); }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int loopCount = 1000, int maxTimeMs = 1000)
         {
-            CancelANonCancellableTaskAsync().Wait();
+            // Create new stopwatch.
+            Stopwatch stopwatch = new Stopwatch();
 
-            return View();
+            // Begin timing.
+            stopwatch.Start();
+
+
+            string myResult = "init";
+
+            var listOfTasks = new List<Task>();
+            var task1 = DemoStringAsync(loopCount);
+            listOfTasks.Add(task1);
+
+            var taskResults = await Task.WhenAll(listOfTasks.Select(x => Task.WhenAny(x, Task.Delay(TimeSpan.FromMilliseconds(maxTimeMs)))));
+
+            var succeedResults = taskResults.OfType<Task<string>>().Select(s => s.Result).ToList();
+
+            if (succeedResults.Count() != listOfTasks.Count())
+            {
+                myResult = "Time Out Occured";
+            }
+            else
+            {
+                myResult = succeedResults.FirstOrDefault();
+            }
+
+            // Stop timing.
+            stopwatch.Stop();
+
+            myResult = $"{myResult} <br/> Elapsed Time: {stopwatch.Elapsed.TotalMilliseconds}<br/>";
+
+            return View("Index", myResult);
         }
 
         public IActionResult Privacy() { return View(); }
 
-        private async Task CancelANonCancellableTaskAsync()
+        private async Task<string> DemoStringAsync(int loopCount)
         {
+            string sReturn = "init";
             using (var cancellationTokenSource = new CancellationTokenSource())
             {
-                // Listening to key press to cancel
-                var keyBoardTask = Task.Run(() =>
-                {
-                    // Sending the cancellation message
-                    cancellationTokenSource.Cancel();
-                });
-
                 try
                 {
                     // Running the long running task
-                    var longRunningTask = asyncMock.LongRunningOperationWithCancellationTokenAsync(100,
-                                                                                                   cancellationTokenSource.Token)
+                    var longRunningTask = asyncMock.LongRunningOperationWithCancellationTokenAsync(loopCount, cancellationTokenSource.Token)
                         .ConfigureAwait(false);
                     var result = await longRunningTask;
+
+                    sReturn = $"Task Complete <br/>Result:{result}";
                 }
                 catch (TaskCanceledException)
                 {
+                    sReturn = "TaskCanceledException";
                 }
-                await keyBoardTask;
             }
+            return sReturn;
         }
     }
 }

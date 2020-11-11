@@ -4,9 +4,9 @@ VisualStudioVersion = 16.0.30323.103
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncTips", "AsyncTips\AsyncTips.csproj", "{5ADC9AEF-862C-46EC-8C19-AB4C553FB6EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncDemo", "AsyncDemo\AsyncDemo.csproj", "{D1739A95-6AD3-4EB4-8C49-5785B107CD02}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncDemo", "AsyncDemo\AsyncDemo.csproj", "{D1739A95-6AD3-4EB4-8C49-5785B107CD02}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncWeb", "AsyncWeb\AsyncWeb.csproj", "{30CE14C0-CB8A-4E05-BCBA-05D4924452D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncWeb", "AsyncWeb\AsyncWeb.csproj", "{30CE14C0-CB8A-4E05-BCBA-05D4924452D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
