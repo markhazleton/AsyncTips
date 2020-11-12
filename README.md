@@ -17,4 +17,5 @@ Souce of CancelAsyncWithToken project:
 Article on Crafting a Task.Timeout
 [https://devblogs.microsoft.com/pfxteam/crafting-a-task-timeoutafter-method/](https://devblogs.microsoft.com/pfxteam/crafting-a-task-timeoutafter-method/)
 
-
+Related Stack Overflow Question
+[https://stackoverflow.com/questions/4238345/asynchronously-wait-for-taskt-to-complete-with-timeout](https://stackoverflow.com/questions/4238345/asynchronously-wait-for-taskt-to-complete-with-timeout)
