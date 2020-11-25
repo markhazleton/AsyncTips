@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AsyncApi</name>
+    </assembly>
+    <members>
+        <member name="T:AsyncApi.Controllers.api.RemoteController">
+            <summary>
+            Remote Server MOCK
+            </summary>
+        </member>
+        <member name="M:AsyncApi.Controllers.api.RemoteController.#ctor(Microsoft.Extensions.Logging.ILogger{AsyncApi.Controllers.api.RemoteController})">
+            <summary>
+            
+            </summary>
+            <param name="logger"></param>
+        </member>
+        <member name="M:AsyncApi.Controllers.api.RemoteController.Get(System.Int32)">
+            <summary>
+            Get the current forcast
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AsyncApi.Controllers.api.RemoteController.GetResults(System.Int32,System.Int32)">
+            <summary>
+            Get Results
+            </summary>
+            <param name="loopCount"></param>
+            <param name="maxTimeMs"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AsyncApi.Controllers.HomeController">
+            <summary>
+            Home MVC Controller
+            </summary>
+        </member>
+        <member name="M:AsyncApi.Controllers.HomeController.#ctor(Microsoft.Extensions.Logging.ILogger{AsyncApi.Controllers.HomeController})">
+            <summary>
+            
+            </summary>
+            <param name="logger"></param>
+        </member>
+        <member name="M:AsyncApi.Controllers.HomeController.Error">
+            <summary>
+            Home error page
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AsyncApi.Controllers.HomeController.Index(System.Int32,System.Int32)">
+            <summary>
+            Home Page
+            </summary>
+            <param name="loopCount"></param>
+            <param name="maxTimeMs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AsyncApi.Controllers.HomeController.Privacy">
+            <summary>
+            Privacy Page
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
