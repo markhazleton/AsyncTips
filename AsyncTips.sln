@@ -10,6 +10,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncWeb", "AsyncWeb\AsyncW
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CancelAsyncWithToken", "CancelAsyncWithToken\CancelAsyncWithToken.csproj", "{C0565FF4-986B-4C1C-B478-B1B09EE93E69}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncApi", "AsyncApi\AsyncApi.csproj", "{185A17F0-AE6E-4203-B64D-622D5DA48161}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{C0565FF4-986B-4C1C-B478-B1B09EE93E69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0565FF4-986B-4C1C-B478-B1B09EE93E69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0565FF4-986B-4C1C-B478-B1B09EE93E69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{185A17F0-AE6E-4203-B64D-622D5DA48161}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{185A17F0-AE6E-4203-B64D-622D5DA48161}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{185A17F0-AE6E-4203-B64D-622D5DA48161}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{185A17F0-AE6E-4203-B64D-622D5DA48161}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

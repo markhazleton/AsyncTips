@@ -1,5 +1,7 @@
 ﻿using AsyncDemo;
 using AsyncWeb.Models;
+//using Polly.Retry;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -7,16 +9,23 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+//using Polly;
 using System.Threading.Tasks;
 
 namespace AsyncWeb.Controllers
 {
     public class HomeController : Controller
     {
+        //private readonly AsyncRetryPolicy<HttpResponseMessage> _httpRetryPolicy;
         private readonly AsyncMock asyncMock = new AsyncMock();
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger) { _logger = logger; }
+        public HomeController(ILogger<HomeController> logger)
+        {
+            _logger = logger;
+            //_httpRetryPolicy = Policy.HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
+            //        .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt) / 2));
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
