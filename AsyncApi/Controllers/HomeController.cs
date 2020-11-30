@@ -17,7 +17,6 @@ using System.Threading.Tasks;
 
 namespace AsyncApi.Controllers
 {
-
     /// <summary>
     /// Home MVC Controller
     /// </summary>
@@ -29,7 +28,7 @@ namespace AsyncApi.Controllers
         private readonly HttpClient client;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="logger"></param>
         public HomeController(ILogger<HomeController> logger)

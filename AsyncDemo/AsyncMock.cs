@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace AsyncDemo
 {
     /// <summary>
-    /// Samples for Async Methods 
+    /// Samples for Async Methods
     /// Supporting Video: https://channel9.msdn.com/Series/Three-Essential-Tips-for-Async/Three-Essential-Tips-For-Async-Introduction
     /// Supporting Blog: https://johnthiriet.com/configure-await/
     /// </summary>

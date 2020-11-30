@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace AsyncApi.Controllers.api
 {
-
     /// <summary>
     /// Remote Server MOCK
     /// </summary>
@@ -22,7 +21,7 @@ namespace AsyncApi.Controllers.api
         private readonly AsyncMock asyncMock = new();
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="logger"></param>
         public RemoteController(ILogger<RemoteController> logger)
@@ -58,7 +57,7 @@ namespace AsyncApi.Controllers.api
         /// <returns></returns>
         [HttpGet]
         [Route("")]
-        public IEnumerable<WeatherForecast> Get(int days=10)
+        public IEnumerable<WeatherForecast> Get(int days = 10)
         {
             return Enumerable.Range(1, days).Select(index => new WeatherForecast
             {

@@ -1,5 +1,3 @@
-using System;
-
 namespace AsyncApi.Models
 {
     public class ErrorViewModel

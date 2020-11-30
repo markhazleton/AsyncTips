@@ -8,17 +8,17 @@ using System.Threading.Tasks;
 
 namespace CancelAsyncWithToken
 {
-    class Program
+    internal class Program
     {
         private const int MillisecondsDelay = 3000;
-        static readonly CancellationTokenSource s_cts = new CancellationTokenSource();
+        private static readonly CancellationTokenSource s_cts = new CancellationTokenSource();
 
-        static readonly HttpClient s_client = new HttpClient
+        private static readonly HttpClient s_client = new HttpClient
         {
             MaxResponseContentBufferSize = 1_000_000
         };
 
-        static readonly IEnumerable<string> s_urlList = new string[]
+        private static readonly IEnumerable<string> s_urlList = new string[]
         {
             "https://docs.microsoft.com",
             "https://docs.microsoft.com/aspnet/core",
@@ -41,7 +41,7 @@ namespace CancelAsyncWithToken
             "https://docs.microsoft.com/xamarin"
         };
 
-        static async Task Main()
+        private static async Task Main()
         {
             Console.WriteLine("Application started.");
             s_cts.CancelAfter(millisecondsDelay: MillisecondsDelay);
@@ -50,7 +50,7 @@ namespace CancelAsyncWithToken
             Console.ReadLine();
         }
 
-        static async Task SumPageSizesAsync()
+        private static async Task SumPageSizesAsync()
         {
             var stopwatch = Stopwatch.StartNew();
             int total = 0;
@@ -75,7 +75,7 @@ namespace CancelAsyncWithToken
             Console.WriteLine($"Elapsed time: {stopwatch.ElapsedMilliseconds}");
         }
 
-        static async Task<int> ProcessUrlAsync(string url, HttpClient client, CancellationToken token)
+        private static async Task<int> ProcessUrlAsync(string url, HttpClient client, CancellationToken token)
         {
             HttpResponseMessage response = await client.GetAsync(url, token);
             byte[] content = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(true);

@@ -10,10 +10,10 @@
             </summary>
         </member>
         <member name="M:AsyncApi.Controllers.api.RemoteController.#ctor(Microsoft.Extensions.Logging.ILogger{AsyncApi.Controllers.api.RemoteController})">
-            <summary>
+             <summary>
             
-            </summary>
-            <param name="logger"></param>
+             </summary>
+             <param name="logger"></param>
         </member>
         <member name="M:AsyncApi.Controllers.api.RemoteController.Get(System.Int32)">
             <summary>
@@ -35,10 +35,10 @@
             </summary>
         </member>
         <member name="M:AsyncApi.Controllers.HomeController.#ctor(Microsoft.Extensions.Logging.ILogger{AsyncApi.Controllers.HomeController})">
-            <summary>
+             <summary>
             
-            </summary>
-            <param name="logger"></param>
+             </summary>
+             <param name="logger"></param>
         </member>
         <member name="M:AsyncApi.Controllers.HomeController.Error">
             <summary>

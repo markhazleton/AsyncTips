@@ -87,7 +87,6 @@ namespace AsyncTips
             Console.ReadLine();
         }
 
-
         private static async Task ExecuteTaskWithTimeoutAsync(TimeSpan timeSpan)
         {
             Console.WriteLine(nameof(ExecuteTaskWithTimeoutAsync));
