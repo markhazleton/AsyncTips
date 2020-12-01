@@ -15,7 +15,7 @@
              </summary>
              <param name="logger"></param>
         </member>
-        <member name="M:AsyncApi.Controllers.api.RemoteController.Get(System.Int32)">
+        <member name="M:AsyncApi.Controllers.api.RemoteController.GetWeather(System.Int32)">
             <summary>
             Get the current forcast
             </summary>
@@ -28,6 +28,7 @@
             <param name="loopCount"></param>
             <param name="maxTimeMs"></param>
             <returns></returns>
+            <response code="200">Request Processed successfully.</response>
         </member>
         <member name="T:AsyncApi.Controllers.HomeController">
             <summary>

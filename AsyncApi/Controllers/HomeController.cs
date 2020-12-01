@@ -12,7 +12,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace AsyncApi.Controllers
@@ -24,7 +23,6 @@ namespace AsyncApi.Controllers
     {
         private readonly AsyncRetryPolicy<HttpResponseMessage> _httpRetryPolicy;
         private readonly ILogger<HomeController> _logger;
-        private readonly AsyncMock asyncMock = new AsyncMock();
         private readonly HttpClient client;
 
         /// <summary>
@@ -41,47 +39,6 @@ namespace AsyncApi.Controllers
             client.BaseAddress = new Uri(@"https://localhost:44377/api/");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        }
-
-        private async Task<string> DemoStringAsync(int loopCount)
-        {
-            string sReturn = "init";
-            using (var cancellationTokenSource = new CancellationTokenSource())
-            {
-                try
-                {
-                    // Running the long running task
-                    var longRunningTask = asyncMock.LongRunningOperationWithCancellationTokenAsync(loopCount, cancellationTokenSource.Token)
-                        .ConfigureAwait(false);
-                    var result = await longRunningTask;
-
-                    sReturn = $"Task Complete <br/>Result:{result}";
-                }
-                catch (TaskCanceledException)
-                {
-                    sReturn = "TaskCanceledException";
-                }
-            }
-            return sReturn;
-        }
-
-        private async Task<string> GetResultsAsync(int loopCount, int maxTimeMs)
-        {
-            string myResult = "init";
-            var listOfTasks = new List<Task>();
-            var task1 = DemoStringAsync(loopCount);
-            listOfTasks.Add(task1);
-            var taskResults = await Task.WhenAll(listOfTasks.Select(x => Task.WhenAny(x, Task.Delay(TimeSpan.FromMilliseconds(maxTimeMs)))));
-            var succeedResults = taskResults.OfType<Task<string>>().Select(s => s.Result).ToList();
-            if (succeedResults.Count() != listOfTasks.Count())
-            {
-                myResult = "Time Out Occured";
-            }
-            else
-            {
-                myResult = succeedResults.FirstOrDefault();
-            }
-            return myResult;
         }
 
         /// <summary>
@@ -103,13 +60,34 @@ namespace AsyncApi.Controllers
             // Create new stopwatch.
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            string myResult = await GetResultsAsync(loopCount, maxTimeMs).ConfigureAwait(true);
+            string myResult = "<h1>Results</h1>";
 
             List<WeatherForecast> resp;
+            MockResults mockResults;
             HttpResponseMessage response = new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
+
             try
             {
-                response = await client.GetAsync($"remote/");
+                response = await client.GetAsync($"remote/Results?loopCount={loopCount}&maxTimeMs={maxTimeMs}");
+                if (response.IsSuccessStatusCode)
+                {
+                    mockResults = await response.Content.ReadFromJsonAsync<MockResults>();
+                    myResult = $"{myResult} <br/><br/> Mock Result: {mockResults.Message } <br/>loops:{mockResults.LoopCount}<br/>max time:{mockResults.MaxTimeMS}<br/><hr/>";
+                }
+                else 
+                {
+                    mockResults = await response.Content.ReadFromJsonAsync<MockResults>();
+                    myResult = $"{myResult} <br/><br/> Mock Result: {mockResults.Message } <br/>loops:{mockResults.LoopCount}<br/>max time:{mockResults.MaxTimeMS}<br/><hr/>";
+                }
+            }
+            catch (Exception ex)
+            {
+                myResult = $"{myResult} <br/><br/> {response.Content} <br/><br/> {ex.Message}";
+            }
+
+            try
+            {
+                response = await client.GetAsync($"remote/weather");
                 if (response.IsSuccessStatusCode)
                 {
                     resp = await response.Content.ReadFromJsonAsync<List<WeatherForecast>>();

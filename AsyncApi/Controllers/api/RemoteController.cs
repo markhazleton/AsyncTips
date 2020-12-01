@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -56,8 +57,8 @@ namespace AsyncApi.Controllers.api
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("")]
-        public IEnumerable<WeatherForecast> Get(int days = 10)
+        [Route("weather")]
+        public IEnumerable<WeatherForecast> GetWeather(int days = 10)
         {
             return Enumerable.Range(1, days).Select(index => new WeatherForecast
             {
@@ -66,15 +67,20 @@ namespace AsyncApi.Controllers.api
             .ToArray();
         }
 
+
         /// <summary>
         /// Get Results
         /// </summary>
         /// <param name="loopCount"></param>
         /// <param name="maxTimeMs"></param>
         /// <returns></returns>
+        /// <response code="200">Request Processed successfully.</response>
+        [ProducesResponseType(typeof(MockResults), 200)]
+        /// <response code="200">Request Timeout.</response>
+        [ProducesResponseType(typeof(MockResults), 408)]
         [HttpGet]
         [Route("Results")]
-        public async Task<MockResults> GetResults(int loopCount, int maxTimeMs)
+        public async Task<IActionResult> GetResults(int loopCount, int maxTimeMs)
         {
             MockResults myResult = new() { LoopCount = loopCount, MaxTimeMS = maxTimeMs, Message = "init" };
             var listOfTasks = new List<Task>();
@@ -86,13 +92,27 @@ namespace AsyncApi.Controllers.api
             {
                 myResult.Message = "Time Out Occured";
                 myResult.ResultValue = "-1";
+                return StatusCode((int)HttpStatusCode.RequestTimeout, myResult);
             }
             else
             {
                 myResult.Message = succeedResults.FirstOrDefault().Message;
                 myResult.ResultValue = succeedResults.FirstOrDefault().ResultValue;
             }
-            return myResult;
+            return Ok(myResult);
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
