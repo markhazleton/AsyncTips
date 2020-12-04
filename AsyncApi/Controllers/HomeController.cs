@@ -24,6 +24,8 @@ namespace AsyncApi.Controllers
         private readonly AsyncRetryPolicy<HttpResponseMessage> _httpRetryPolicy;
         private readonly ILogger<HomeController> _logger;
         private readonly HttpClient client;
+        private readonly Stopwatch stopWatch;
+        private readonly Random jitter;
 
         /// <summary>
         ///
@@ -31,14 +33,17 @@ namespace AsyncApi.Controllers
         /// <param name="logger"></param>
         public HomeController(ILogger<HomeController> logger)
         {
+            jitter = new Random();
             _logger = logger;
             _httpRetryPolicy = Policy.HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
-                    .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt) / 2));
+                    .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt) / 2)
+                    + TimeSpan.FromSeconds(jitter.Next(0, 10)));
 
             client = new HttpClient();
             client.BaseAddress = new Uri(@"https://localhost:44377/api/");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            stopWatch = new Stopwatch();
         }
 
         /// <summary>
@@ -57,9 +62,8 @@ namespace AsyncApi.Controllers
         /// <returns></returns>
         public async Task<IActionResult> Index(int loopCount = 1000, int maxTimeMs = 1000)
         {
-            // Create new stopwatch.
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
+            stopWatch.Reset();
+            stopWatch.Start();
             string myResult = "<h1>Results</h1>";
 
             List<WeatherForecast> resp;
@@ -68,13 +72,13 @@ namespace AsyncApi.Controllers
 
             try
             {
-                response = await client.GetAsync($"remote/Results?loopCount={loopCount}&maxTimeMs={maxTimeMs}");
+                response = await _httpRetryPolicy.ExecuteAsync(() => client.GetAsync($"remote/Results?loopCount={loopCount}&maxTimeMs={maxTimeMs}"));
                 if (response.IsSuccessStatusCode)
                 {
                     mockResults = await response.Content.ReadFromJsonAsync<MockResults>();
                     myResult = $"{myResult} <br/><br/> Mock Result: {mockResults.Message } <br/>loops:{mockResults.LoopCount}<br/>max time:{mockResults.MaxTimeMS}<br/><hr/>";
                 }
-                else 
+                else
                 {
                     mockResults = await response.Content.ReadFromJsonAsync<MockResults>();
                     myResult = $"{myResult} <br/><br/> Mock Result: {mockResults.Message } <br/>loops:{mockResults.LoopCount}<br/>max time:{mockResults.MaxTimeMS}<br/><hr/>";
@@ -101,9 +105,9 @@ namespace AsyncApi.Controllers
             }
 
             // Stop timing.
-            stopwatch.Stop();
+            stopWatch.Stop();
 
-            myResult = $"{myResult} <br/> Elapsed Time: {stopwatch.Elapsed.TotalMilliseconds}<br/>";
+            myResult = $"{myResult} <br/><strong>Total Elapsed Time: {stopWatch.Elapsed.TotalMilliseconds}</strong><br/>";
 
             return View("Index", myResult);
         }

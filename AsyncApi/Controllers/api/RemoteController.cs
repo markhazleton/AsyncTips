@@ -19,7 +19,7 @@ namespace AsyncApi.Controllers.api
     public class RemoteController : ControllerBase
     {
         private readonly ILogger<RemoteController> _logger;
-        private readonly AsyncMock asyncMock = new();
+        private readonly AsyncMock asyncMock = new AsyncMock();
 
         /// <summary>
         ///
@@ -32,7 +32,7 @@ namespace AsyncApi.Controllers.api
 
         private async Task<MockResults> MockResultsAsync(int loopCount)
         {
-            MockResults sReturn = new() { LoopCount = loopCount, Message = "init" };
+            MockResults sReturn = new MockResults() { LoopCount = loopCount, Message = "init" };
             using (var cancellationTokenSource = new CancellationTokenSource())
             {
                 try
@@ -75,14 +75,14 @@ namespace AsyncApi.Controllers.api
         /// <param name="maxTimeMs"></param>
         /// <returns></returns>
         /// <response code="200">Request Processed successfully.</response>
-        [ProducesResponseType(typeof(MockResults), 200)]
         /// <response code="200">Request Timeout.</response>
+        [ProducesResponseType(typeof(MockResults), 200)]
         [ProducesResponseType(typeof(MockResults), 408)]
         [HttpGet]
         [Route("Results")]
         public async Task<IActionResult> GetResults(int loopCount, int maxTimeMs)
         {
-            MockResults myResult = new() { LoopCount = loopCount, MaxTimeMS = maxTimeMs, Message = "init" };
+            MockResults myResult = new MockResults() { LoopCount = loopCount, MaxTimeMS = maxTimeMs, Message = "init" };
             var listOfTasks = new List<Task>();
             var task1 = MockResultsAsync(loopCount);
             listOfTasks.Add(task1);

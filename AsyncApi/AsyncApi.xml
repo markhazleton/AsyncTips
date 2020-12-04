@@ -29,6 +29,7 @@
             <param name="maxTimeMs"></param>
             <returns></returns>
             <response code="200">Request Processed successfully.</response>
+            <response code="200">Request Timeout.</response>
         </member>
         <member name="T:AsyncApi.Controllers.HomeController">
             <summary>
@@ -60,6 +61,125 @@
             Privacy Page
             </summary>
             <returns></returns>
+        </member>
+        <member name="T:AsyncApi.Models.ErrorViewModel">
+            <summary>
+            Error View Model
+            </summary>
+        </member>
+        <member name="P:AsyncApi.Models.ErrorViewModel.RequestId">
+            <summary>
+            Request ID
+            </summary>
+        </member>
+        <member name="P:AsyncApi.Models.ErrorViewModel.ShowRequestId">
+            <summary>
+            Show Request Id
+            </summary>
+        </member>
+        <member name="T:AsyncApi.Policies.PolicyContextItems">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:AsyncApi.Policies.PolicyContextItems.Logger">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:AsyncApi.Policies.PolicyNames">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:AsyncApi.Policies.PolicyNames.BasicRetry">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:AsyncApi.Policies.PollyContextExtensions">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:AsyncApi.Policies.PollyContextExtensions.TryGetLogger(Polly.Context,Microsoft.Extensions.Logging.ILogger@)">
+            <summary>
+            
+            </summary>
+            <param name="context"></param>
+            <param name="logger"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AsyncApi.Policies.PollyRegistryExtensions">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:AsyncApi.Policies.PollyRegistryExtensions.AddBasicRetryPolicy(Polly.Registry.IPolicyRegistry{System.String})">
+            <summary>
+            
+            </summary>
+            <param name="policyRegistry"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AsyncApi.Policies.PollyServiceCollectionExtensions">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:AsyncApi.Policies.PollyServiceCollectionExtensions.AddPollyPolicies(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            
+            </summary>
+            <param name="services"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AsyncApi.Program">
+            <summary>
+            Program
+            </summary>
+        </member>
+        <member name="M:AsyncApi.Program.Main(System.String[])">
+            <summary>
+            Main
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:AsyncApi.Program.CreateHostBuilder(System.String[])">
+            <summary>
+            Create Host Builder
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AsyncApi.Startup">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:AsyncApi.Startup.Configuration">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:AsyncApi.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            
+            </summary>
+            <param name="configuration"></param>
+        </member>
+        <member name="M:AsyncApi.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            This method gets called by the runtime. Use this method to add services to the container.
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:AsyncApi.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            </summary>
+            <param name="app"></param>
+            <param name="env"></param>
         </member>
     </members>
 </doc>
