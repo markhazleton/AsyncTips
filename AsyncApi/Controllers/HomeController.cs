@@ -21,7 +21,8 @@ namespace AsyncApi.Controllers
     /// </summary>
     public class HomeController : Controller
     {
-        private readonly AsyncRetryPolicy<HttpResponseMessage> _httpRetryPolicy;
+        private readonly AsyncRetryPolicy<HttpResponseMessage> _httpIndexPolicy;
+        private readonly AsyncRetryPolicy<HttpResponseMessage> _httpWeatherPolicy;
         private readonly ILogger<HomeController> _logger;
         private readonly HttpClient client;
         private readonly Stopwatch stopWatch;
@@ -35,9 +36,12 @@ namespace AsyncApi.Controllers
         {
             jitter = new Random();
             _logger = logger;
-            _httpRetryPolicy = Policy.HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
-                    .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt) / 2)
-                    + TimeSpan.FromSeconds(jitter.Next(0, 10)));
+            _httpIndexPolicy = Policy.HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
+                    .WaitAndRetryAsync(0, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt) / 2)
+                    + TimeSpan.FromSeconds(jitter.Next(0, 3)));
+            _httpWeatherPolicy = Policy.HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
+                    .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt) / 2)
+                    + TimeSpan.FromSeconds(jitter.Next(0, 3)));
 
             client = new HttpClient();
             client.BaseAddress = new Uri(@"https://localhost:44377/api/");
@@ -66,32 +70,56 @@ namespace AsyncApi.Controllers
             stopWatch.Start();
             string myResult = "<h1>Results</h1>";
 
-            List<WeatherForecast> resp;
             MockResults mockResults;
             HttpResponseMessage response = new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
 
             try
             {
-                response = await _httpRetryPolicy.ExecuteAsync(() => client.GetAsync($"remote/Results?loopCount={loopCount}&maxTimeMs={maxTimeMs}"));
+                response = await _httpIndexPolicy.ExecuteAsync(() => client.GetAsync($"remote/Results?loopCount={loopCount}&maxTimeMs={maxTimeMs}"));
                 if (response.IsSuccessStatusCode)
                 {
                     mockResults = await response.Content.ReadFromJsonAsync<MockResults>();
-                    myResult = $"{myResult} <br/><br/> Mock Result: {mockResults.Message } <br/>loops:{mockResults.LoopCount}<br/>max time:{mockResults.MaxTimeMS}<br/><hr/>";
                 }
                 else
                 {
-                    mockResults = await response.Content.ReadFromJsonAsync<MockResults>();
-                    myResult = $"{myResult} <br/><br/> Mock Result: {mockResults.Message } <br/>loops:{mockResults.LoopCount}<br/>max time:{mockResults.MaxTimeMS}<br/><hr/>";
+                    mockResults = new MockResults
+                    {
+                        Message = $"<br/>Remote Call Failed:{response.StatusCode}"
+                    };
                 }
+                myResult = $"{myResult} <br/><br/> Mock Result: {mockResults.Message } <br/>loops:{mockResults.LoopCount}<br/>max time:{mockResults.MaxTimeMS}<br/>run time:{mockResults.RunTimeMS}<br/><hr/>";
             }
             catch (Exception ex)
             {
                 myResult = $"{myResult} <br/><br/> {response.Content} <br/><br/> {ex.Message}";
             }
 
+            // Stop timing.
+            stopWatch.Stop();
+
+            myResult = $"{myResult} <br/><strong>Total Elapsed Time: {stopWatch.Elapsed.TotalMilliseconds}</strong><br/>";
+
+            return View("Index", myResult);
+        }
+
+
+        /// <summary>
+        /// Weather
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> Weather()
+        {
+            stopWatch.Reset();
+            stopWatch.Start();
+            string myResult = "<h1>Results</h1>";
+
+            HttpResponseMessage response = new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
+
+            List<WeatherForecast> resp;
             try
             {
-                response = await client.GetAsync($"remote/weather");
+                response = await _httpWeatherPolicy.ExecuteAsync(() => client.GetAsync($"remote/weather"));
+
                 if (response.IsSuccessStatusCode)
                 {
                     resp = await response.Content.ReadFromJsonAsync<List<WeatherForecast>>();
@@ -109,8 +137,15 @@ namespace AsyncApi.Controllers
 
             myResult = $"{myResult} <br/><strong>Total Elapsed Time: {stopWatch.Elapsed.TotalMilliseconds}</strong><br/>";
 
-            return View("Index", myResult);
+            return View("Weather", myResult);
         }
+
+
+
+
+
+
+
 
         /// <summary>
         /// Privacy Page

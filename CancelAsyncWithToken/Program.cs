@@ -10,7 +10,7 @@ namespace CancelAsyncWithToken
 {
     internal class Program
     {
-        private const int MillisecondsDelay = 3000;
+        private const int MillisecondsDelay = 9000;
         private static readonly CancellationTokenSource s_cts = new CancellationTokenSource();
 
         private static readonly HttpClient s_client = new HttpClient
@@ -79,7 +79,6 @@ namespace CancelAsyncWithToken
         {
             HttpResponseMessage response = await client.GetAsync(url, token);
             byte[] content = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(true);
-            //byte[] content = await response.Content.ReadAsByteArrayAsync(token);
             Console.WriteLine($"{url,-60} {content.Length,10:#,#}");
             return content.Length;
         }

@@ -56,6 +56,12 @@
             <param name="maxTimeMs"></param>
             <returns></returns>
         </member>
+        <member name="M:AsyncApi.Controllers.HomeController.Weather">
+            <summary>
+            Weather
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:AsyncApi.Controllers.HomeController.Privacy">
             <summary>
             Privacy Page

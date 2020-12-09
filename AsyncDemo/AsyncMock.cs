@@ -33,8 +33,9 @@ namespace AsyncDemo
 
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    // Do something that takes times like a Thread.Sleep in .NET Core 2.
-                    Thread.Sleep(10);
+                    // Do something that takes times.
+                    Thread.Sleep(i);
+
                     result += i;
                 }
                 return result;
@@ -57,7 +58,7 @@ namespace AsyncDemo
                 // Loop for a defined number of iterations
                 for (int i = 0; i < loop; i++)
                 {
-                    // Do something that takes times like a Thread.Sleep in .NET Core 2.
+                    // Do something that takes a long time (i.e. sleep) 
                     Thread.Sleep(10);
                     result += i;
                 }

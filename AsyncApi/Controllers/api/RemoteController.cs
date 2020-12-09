@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -32,7 +33,7 @@ namespace AsyncApi.Controllers.api
 
         private async Task<MockResults> MockResultsAsync(int loopCount)
         {
-            MockResults sReturn = new MockResults() { LoopCount = loopCount, Message = "init" };
+            MockResults returnMock = new MockResults() { LoopCount = loopCount, Message = "init" };
             using (var cancellationTokenSource = new CancellationTokenSource())
             {
                 try
@@ -40,16 +41,16 @@ namespace AsyncApi.Controllers.api
                     // Running the long running task
                     var result = await asyncMock.LongRunningOperationWithCancellationTokenAsync(loopCount, cancellationTokenSource.Token)
                         .ConfigureAwait(false);
-                    sReturn.Message = $"Task Complete";
-                    sReturn.ResultValue = result.ToString();
+                    returnMock.Message = $"Task Complete";
+                    returnMock.ResultValue = result.ToString();
                 }
                 catch (TaskCanceledException)
                 {
-                    sReturn.Message = "TaskCanceledException";
-                    sReturn.ResultValue = "-1";
+                    returnMock.Message = "TaskCanceledException";
+                    returnMock.ResultValue = "-1";
                 }
             }
-            return sReturn;
+            return returnMock;
         }
 
         /// <summary>
@@ -82,23 +83,27 @@ namespace AsyncApi.Controllers.api
         [Route("Results")]
         public async Task<IActionResult> GetResults(int loopCount, int maxTimeMs)
         {
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+
             MockResults myResult = new MockResults() { LoopCount = loopCount, MaxTimeMS = maxTimeMs, Message = "init" };
             var listOfTasks = new List<Task>();
             var task1 = MockResultsAsync(loopCount);
             listOfTasks.Add(task1);
             var taskResults = await Task.WhenAll(listOfTasks.Select(x => Task.WhenAny(x, Task.Delay(TimeSpan.FromMilliseconds(maxTimeMs)))));
             var succeedResults = taskResults.OfType<Task<MockResults>>().Select(s => s.Result).ToList();
+
+            watch.Stop();
+            myResult.RunTimeMS = (int)watch.ElapsedMilliseconds;
             if (succeedResults.Count() != listOfTasks.Count())
             {
                 myResult.Message = "Time Out Occured";
                 myResult.ResultValue = "-1";
                 return StatusCode((int)HttpStatusCode.RequestTimeout, myResult);
             }
-            else
-            {
-                myResult.Message = succeedResults.FirstOrDefault().Message;
-                myResult.ResultValue = succeedResults.FirstOrDefault().ResultValue;
-            }
+
+            myResult.Message = succeedResults.FirstOrDefault().Message;
+            myResult.ResultValue = succeedResults.FirstOrDefault().ResultValue;
             return Ok(myResult);
         }
 

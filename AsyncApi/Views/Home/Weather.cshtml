@@ -1,0 +1,14 @@
+﻿@model string
+@{
+    string sDisplay = Model;
+
+    if (Model == null)
+        sDisplay = "Model Was Null";
+
+    ViewData["Title"] = "Async Api Demo Weather Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Async Api Demo</h1>
+    <h2>@{ @Html.Raw(sDisplay) }</h2>
+</div>
