@@ -158,6 +158,39 @@
             <param name="args"></param>
             <returns></returns>
         </member>
+        <member name="T:AsyncApi.MyHttpContext">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:AsyncApi.MyHttpContext.Current">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:AsyncApi.MyHttpContext.AppBaseUrl">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:AsyncApi.HttpContextExtensions">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:AsyncApi.HttpContextExtensions.AddHttpContextAccessor(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:AsyncApi.HttpContextExtensions.UseHttpContext(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            
+            </summary>
+            <param name="app"></param>
+            <returns></returns>
+        </member>
         <member name="T:AsyncApi.Startup">
             <summary>
             

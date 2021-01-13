@@ -1,6 +1,7 @@
 using AsyncApi.Policies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,6 +9,58 @@ using Microsoft.OpenApi.Models;
 
 namespace AsyncApi
 {
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class MyHttpContext
+    {
+        private static IHttpContextAccessor m_httpContextAccessor;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static HttpContext Current => m_httpContextAccessor.HttpContext;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static string AppBaseUrl => $"{Current.Request.Scheme}://{Current.Request.Host}{Current.Request.PathBase}";
+
+        internal static void Configure(IHttpContextAccessor contextAccessor)
+        {
+            m_httpContextAccessor = contextAccessor;
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public static class HttpContextExtensions
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="services"></param>
+        public static void AddHttpContextAccessor(this IServiceCollection services)
+        {
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="app"></param>
+        /// <returns></returns>
+        public static IApplicationBuilder UseHttpContext(this IApplicationBuilder app)
+        {
+            MyHttpContext.Configure(app.ApplicationServices.GetRequiredService<IHttpContextAccessor>());
+            return app;
+        }
+    }
+
+
     /// <summary>
     /// 
     /// </summary>
@@ -17,7 +70,6 @@ namespace AsyncApi
         /// 
         /// </summary>
         public IConfiguration Configuration { get; }
-
         /// <summary>
         /// 
         /// </summary>
@@ -79,6 +131,6 @@ namespace AsyncApi
             {
                 endpoints.MapControllers();
             });
-        }
+         }
     }
 }

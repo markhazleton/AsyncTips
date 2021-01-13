@@ -1,6 +1,8 @@
 ﻿using AsyncApi.Models;
 using AsyncDemo;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Polly;
@@ -28,6 +30,7 @@ namespace AsyncApi.Controllers
         private readonly Stopwatch stopWatch;
         private readonly Random jitter;
 
+
         /// <summary>
         ///
         /// </summary>
@@ -44,7 +47,9 @@ namespace AsyncApi.Controllers
                     + TimeSpan.FromSeconds(jitter.Next(0, 3)));
 
             client = new HttpClient();
-            client.BaseAddress = new Uri(@"https://localhost:44377/api/");
+
+            // How to get the base URL for the current web site
+            //            client.BaseAddress = new Uri(apiUrl);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             stopWatch = new Stopwatch();
@@ -69,6 +74,10 @@ namespace AsyncApi.Controllers
             stopWatch.Reset();
             stopWatch.Start();
             string myResult = "<h1>Results</h1>";
+            client.BaseAddress = new Uri($"{Request.Scheme}://{Request.Host}{Request.PathBase}/api/"); ;
+
+
+
 
             MockResults mockResults;
             HttpResponseMessage response = new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
@@ -112,6 +121,8 @@ namespace AsyncApi.Controllers
             stopWatch.Reset();
             stopWatch.Start();
             string myResult = "<h1>Results</h1>";
+            client.BaseAddress = new Uri($"{Request.Scheme}://{Request.Host}{Request.PathBase}/api/"); ;
+
 
             HttpResponseMessage response = new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
 
@@ -139,13 +150,6 @@ namespace AsyncApi.Controllers
 
             return View("Weather", myResult);
         }
-
-
-
-
-
-
-
 
         /// <summary>
         /// Privacy Page
