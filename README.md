@@ -9,7 +9,8 @@ Sample source code for the following blog post
 Another async blog post from John Thiriet
 [https://johnthiriet.com/mvvm-going-async-with-async-command/](https://johnthiriet.com/mvvm-going-async-with-async-command/)
 
-
+# Hosting
+Current Hosted at [https://asyncwebsample.azurewebsites.net/](https://asyncwebsample.azurewebsites.net/)
 # Other Links
 
 [https://codereview.stackexchange.com/questions/113108/async-task-with-timeout](https://codereview.stackexchange.com/questions/113108/async-task-with-timeout)
