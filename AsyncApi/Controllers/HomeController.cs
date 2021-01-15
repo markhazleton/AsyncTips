@@ -69,7 +69,7 @@ namespace AsyncApi.Controllers
         /// <param name="loopCount"></param>
         /// <param name="maxTimeMs"></param>
         /// <returns></returns>
-        public async Task<IActionResult> Index(int loopCount = 1000, int maxTimeMs = 1000)
+        public async Task<IActionResult> Index(int loopCount = 30, int maxTimeMs = 1500)
         {
             stopWatch.Reset();
             stopWatch.Start();

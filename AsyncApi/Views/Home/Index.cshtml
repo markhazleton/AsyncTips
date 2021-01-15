@@ -7,16 +7,43 @@
 
     ViewData["Title"] = "Async Api Demo Home Page";
 }
+<style type="text/css" ">
 
+
+    div.test-list ul {
+        list-style-type: none;
+        padding: 0;
+        font-size: smaller;
+        border: 1px solid #ddd;
+    }
+
+        div.test-list ul li {
+            padding: 4px 8px;
+            border-bottom: 1px solid #ddd;
+        }
+
+            div.test-list ul li:hover {
+                background-color: gold;
+                color: black;
+            }
+
+            div.test-list ul li:last-child {
+                border-bottom: none;
+            }
+
+</style>
 <div class="text-center">
     <h1 class="display-4">Async Api Demo</h1>
     <h2>@{ @Html.Raw(sDisplay) }</h2>
-    <p>
-        Test the Asyc Calls
+    <div class="test-list">
+        Test the Api with Polly Timeouts
         <ul>
             <li><a href="/home/index?loopCount=35&maxTimeMs=1500">35 Loops, max 1.5 seconds</a></li>
             <li><a href="/home/index?loopCount=35&maxTimeMs=1000">35 Loops, max 1 second</a></li>
             <li><a href="/home/index?loopCount=35&maxTimeMs=500">35 Loops, max 1/2 second</a></li>
         </ul>
-    </p>
+    </div>
+    <div>
+        <p>Source Code on <a href="https://github.com/markhazleton/AsyncTips">github.com/markhazleton/AsyncTips</a></p>
+    </div>
 </div>
