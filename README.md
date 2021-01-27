@@ -25,6 +25,10 @@ Article on Crafting a Task.Timeout
 Related Stack Overflow Question
 [https://stackoverflow.com/questions/4238345/asynchronously-wait-for-taskt-to-complete-with-timeout](https://stackoverflow.com/questions/4238345/asynchronously-wait-for-taskt-to-complete-with-timeout)
 
+Blog post on surfacing retry count for diagnostics
+[https://www.stevejgordon.co.uk/polly-using-context-to-obtain-retry-count-diagnostics](https://www.stevejgordon.co.uk/polly-using-context-to-obtain-retry-count-diagnostics)
+
+
 # Polly Project
 [http://www.thepollyproject.org/](http://www.thepollyproject.org/)
 Polly is a .NET resilience and transient-fault-handling library that allows developers to express policies such as Retry, Circuit Breaker, Timeout, Bulkhead Isolation, and Fallback in a fluent and thread-safe manner.
