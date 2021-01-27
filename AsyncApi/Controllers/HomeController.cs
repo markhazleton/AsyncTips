@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Polly;
+using Polly.Extensions.Http;
 using Polly.Retry;
 using System;
 using System.Collections.Generic;
@@ -39,12 +40,23 @@ namespace AsyncApi.Controllers
         {
             jitter = new Random();
             _logger = logger;
-            _httpIndexPolicy = Policy.HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
-                    .WaitAndRetryAsync(0, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt) / 2)
-                    + TimeSpan.FromSeconds(jitter.Next(0, 3)));
+            //_httpIndexPolicy = Policy.HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
+            //        .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt) / 2)
+            //        + TimeSpan.FromSeconds(jitter.Next(0, 3)));
             _httpWeatherPolicy = Policy.HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
                     .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt) / 2)
                     + TimeSpan.FromSeconds(jitter.Next(0, 3)));
+
+
+            _httpIndexPolicy = HttpPolicyExtensions.HandleTransientHttpError()
+                .WaitAndRetryAsync(3, retryCount => TimeSpan.FromSeconds(Math.Pow(2, retryCount)),
+                onRetry: (response, delay, retryCount, context) =>
+                {
+                    context["retrycount"] = retryCount;
+                });
+
+
+
 
             client = new HttpClient();
 
@@ -76,7 +88,7 @@ namespace AsyncApi.Controllers
             string myResult = "<h1>Results</h1>";
             client.BaseAddress = new Uri($"{Request.Scheme}://{Request.Host}{Request.PathBase}/api/"); ;
 
-
+            var context = new Polly.Context { { "retrycount ", 0 } };
 
 
             MockResults mockResults;
@@ -84,7 +96,7 @@ namespace AsyncApi.Controllers
 
             try
             {
-                response = await _httpIndexPolicy.ExecuteAsync(() => client.GetAsync($"remote/Results?loopCount={loopCount}&maxTimeMs={maxTimeMs}"));
+                response = await _httpIndexPolicy.ExecuteAsync(ctx => client.GetAsync($"remote/Results?loopCount={loopCount}&maxTimeMs={maxTimeMs}"),context);
                 if (response.IsSuccessStatusCode)
                 {
                     mockResults = await response.Content.ReadFromJsonAsync<MockResults>();
@@ -106,7 +118,12 @@ namespace AsyncApi.Controllers
             // Stop timing.
             stopWatch.Stop();
 
-            myResult = $"{myResult} <br/><strong>Total Elapsed Time: {stopWatch.Elapsed.TotalMilliseconds}</strong><br/>";
+
+            object retries;
+            var finalRetryCount = context.TryGetValue("retrycount", out retries);
+
+
+            myResult = $"{myResult}<br/><strong>Retries:</strong>{retries??=0} <br/><strong>Total Elapsed Time: {stopWatch.Elapsed.TotalMilliseconds}</strong><br/>";
 
             return View("Index", myResult);
         }

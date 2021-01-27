@@ -54,7 +54,7 @@ namespace AsyncApi.Controllers.api
         }
 
         /// <summary>
-        /// Get the current forcast
+        /// Get the current forecast
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -73,6 +73,7 @@ namespace AsyncApi.Controllers.api
         /// Get Results
         /// </summary>
         /// <param name="loopCount"></param>
+        /// 
         /// <param name="maxTimeMs"></param>
         /// <returns></returns>
         /// <response code="200">Request Processed successfully.</response>
@@ -97,7 +98,7 @@ namespace AsyncApi.Controllers.api
             myResult.RunTimeMS = (int)watch.ElapsedMilliseconds;
             if (succeedResults.Count() != listOfTasks.Count())
             {
-                myResult.Message = "Time Out Occured";
+                myResult.Message = "Time Out Occurred";
                 myResult.ResultValue = "-1";
                 return StatusCode((int)HttpStatusCode.RequestTimeout, myResult);
             }
