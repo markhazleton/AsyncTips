@@ -24,6 +24,7 @@ namespace AsyncApi.Controllers
     /// </summary>
     public class HomeController : Controller
     {
+        private const string retryCountKey = "retrycount";
         private readonly AsyncRetryPolicy<HttpResponseMessage> _httpIndexPolicy;
         private readonly AsyncRetryPolicy<HttpResponseMessage> _httpWeatherPolicy;
         private readonly ILogger<HomeController> _logger;
@@ -40,9 +41,7 @@ namespace AsyncApi.Controllers
         {
             jitter = new Random();
             _logger = logger;
-            //_httpIndexPolicy = Policy.HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
-            //        .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt) / 2)
-            //        + TimeSpan.FromSeconds(jitter.Next(0, 3)));
+
             _httpWeatherPolicy = Policy.HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
                     .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt) / 2)
                     + TimeSpan.FromSeconds(jitter.Next(0, 3)));
@@ -52,16 +51,13 @@ namespace AsyncApi.Controllers
                 .WaitAndRetryAsync(3, retryCount => TimeSpan.FromSeconds(Math.Pow(2, retryCount)),
                 onRetry: (response, delay, retryCount, context) =>
                 {
-                    context["retrycount"] = retryCount;
+                    context[retryCountKey] = retryCount;
                 });
-
-
-
 
             client = new HttpClient();
 
             // How to get the base URL for the current web site
-            //            client.BaseAddress = new Uri(apiUrl);
+            // client.BaseAddress = new Uri(apiUrl);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             stopWatch = new Stopwatch();
@@ -83,12 +79,13 @@ namespace AsyncApi.Controllers
         /// <returns></returns>
         public async Task<IActionResult> Index(int loopCount = 30, int maxTimeMs = 1500)
         {
+            // Start timing.
             stopWatch.Reset();
             stopWatch.Start();
             string myResult = "<h1>Results</h1>";
             client.BaseAddress = new Uri($"{Request.Scheme}://{Request.Host}{Request.PathBase}/api/"); ;
 
-            var context = new Polly.Context { { "retrycount ", 0 } };
+            var context = new Polly.Context { { retryCountKey, 0 } };
 
 
             MockResults mockResults;
@@ -120,7 +117,7 @@ namespace AsyncApi.Controllers
 
 
             object retries;
-            var finalRetryCount = context.TryGetValue("retrycount", out retries);
+            var finalRetryCount = context.TryGetValue(retryCountKey, out retries);
 
 
             myResult = $"{myResult}<br/><strong>Retries:</strong>{retries??=0} <br/><strong>Total Elapsed Time: {stopWatch.Elapsed.TotalMilliseconds}</strong><br/>";
