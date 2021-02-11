@@ -1,10 +1,10 @@
 namespace AsyncApi.Models
-{
+    {
     /// <summary>
     /// Error View Model
     /// </summary>
     public class ErrorViewModel
-    {
+        {
         /// <summary>
         /// Request ID
         /// </summary>
@@ -14,5 +14,5 @@ namespace AsyncApi.Models
         /// Show Request Id
         /// </summary>
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+        }
     }
-}

@@ -1,8 +1,6 @@
 ﻿using AsyncApi.Models;
 using AsyncDemo;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Polly;
@@ -18,12 +16,12 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace AsyncApi.Controllers
-{
+    {
     /// <summary>
     /// Home MVC Controller
     /// </summary>
     public class HomeController : Controller
-    {
+        {
         private const string retryCountKey = "retrycount";
         private readonly AsyncRetryPolicy<HttpResponseMessage> _httpIndexPolicy;
         private readonly AsyncRetryPolicy<HttpResponseMessage> _httpWeatherPolicy;
@@ -38,7 +36,7 @@ namespace AsyncApi.Controllers
         /// </summary>
         /// <param name="logger"></param>
         public HomeController(ILogger<HomeController> logger)
-        {
+            {
             jitter = new Random();
             _logger = logger;
 
@@ -61,7 +59,7 @@ namespace AsyncApi.Controllers
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             stopWatch = new Stopwatch();
-        }
+            }
 
         /// <summary>
         /// Home error page
@@ -69,7 +67,7 @@ namespace AsyncApi.Controllers
         /// <returns></returns>
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
-        { return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier }); }
+            { return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier }); }
 
         /// <summary>
         /// Home Page
@@ -78,7 +76,7 @@ namespace AsyncApi.Controllers
         /// <param name="maxTimeMs"></param>
         /// <returns></returns>
         public async Task<IActionResult> Index(int loopCount = 30, int maxTimeMs = 1500)
-        {
+            {
             // Start timing.
             stopWatch.Reset();
             stopWatch.Start();
@@ -92,25 +90,25 @@ namespace AsyncApi.Controllers
             HttpResponseMessage response = new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
 
             try
-            {
-                response = await _httpIndexPolicy.ExecuteAsync(ctx => client.GetAsync($"remote/Results?loopCount={loopCount}&maxTimeMs={maxTimeMs}"),context);
+                {
+                response = await _httpIndexPolicy.ExecuteAsync(ctx => client.GetAsync($"remote/Results?loopCount={loopCount}&maxTimeMs={maxTimeMs}"), context);
                 if (response.IsSuccessStatusCode)
-                {
-                    mockResults = await response.Content.ReadFromJsonAsync<MockResults>();
-                }
-                else
-                {
-                    mockResults = new MockResults
                     {
+                    mockResults = await response.Content.ReadFromJsonAsync<MockResults>();
+                    }
+                else
+                    {
+                    mockResults = new MockResults
+                        {
                         Message = $"<br/>Remote Call Failed:{response.StatusCode}"
-                    };
-                }
+                        };
+                    }
                 myResult = $"{myResult} <br/><br/> Mock Result: {mockResults.Message } <br/>loops:{mockResults.LoopCount}<br/>max time:{mockResults.MaxTimeMS}<br/>run time:{mockResults.RunTimeMS}<br/><hr/>";
-            }
+                }
             catch (Exception ex)
-            {
+                {
                 myResult = $"{myResult} <br/><br/> {response.Content} <br/><br/> {ex.Message}";
-            }
+                }
 
             // Stop timing.
             stopWatch.Stop();
@@ -120,10 +118,10 @@ namespace AsyncApi.Controllers
             var finalRetryCount = context.TryGetValue(retryCountKey, out retries);
 
 
-            myResult = $"{myResult}<br/><strong>Retries:</strong>{retries??=0} <br/><strong>Total Elapsed Time: {stopWatch.Elapsed.TotalMilliseconds}</strong><br/>";
+            myResult = $"{myResult}<br/><strong>Retries:</strong>{retries ??= 0} <br/><strong>Total Elapsed Time: {stopWatch.Elapsed.TotalMilliseconds}</strong><br/>";
 
             return View("Index", myResult);
-        }
+            }
 
 
         /// <summary>
@@ -131,7 +129,7 @@ namespace AsyncApi.Controllers
         /// </summary>
         /// <returns></returns>
         public async Task<IActionResult> Weather()
-        {
+            {
             stopWatch.Reset();
             stopWatch.Start();
             string myResult = "<h1>Results</h1>";
@@ -142,20 +140,20 @@ namespace AsyncApi.Controllers
 
             List<WeatherForecast> resp;
             try
-            {
+                {
                 response = await _httpWeatherPolicy.ExecuteAsync(() => client.GetAsync($"remote/weather"));
 
                 if (response.IsSuccessStatusCode)
-                {
+                    {
                     resp = await response.Content.ReadFromJsonAsync<List<WeatherForecast>>();
                     var forecast = resp.FirstOrDefault();
                     myResult = $"{myResult} <br/><br/> Forecast for {forecast.Date.ToShortDateString() } is {forecast.Summary} ({forecast.TemperatureF} degrees)<br/><br/>";
+                    }
                 }
-            }
             catch (Exception ex)
-            {
+                {
                 myResult = $"{myResult} <br/><br/> {response.Content} <br/><br/> {ex.Message}";
-            }
+                }
 
             // Stop timing.
             stopWatch.Stop();
@@ -163,12 +161,12 @@ namespace AsyncApi.Controllers
             myResult = $"{myResult} <br/><strong>Total Elapsed Time: {stopWatch.Elapsed.TotalMilliseconds}</strong><br/>";
 
             return View("Weather", myResult);
-        }
+            }
 
         /// <summary>
         /// Privacy Page
         /// </summary>
         /// <returns></returns>
         public IActionResult Privacy() { return View(); }
+        }
     }
-}

@@ -10,40 +10,102 @@
 <style type="text/css" ">
 
 
-    div.test-list ul {
-        list-style-type: none;
-        padding: 0;
-        font-size: smaller;
-        border: 1px solid #ddd;
-    }
+div.test-list ul {
+list-style-type: none;
+padding: 0;
+font-size: smaller;
+border: 1px solid #ddd;
+}
 
-        div.test-list ul li {
-            padding: 4px 8px;
-            border-bottom: 1px solid #ddd;
-        }
+div.test-list ul li {
+padding: 4px 8px;
+border-bottom: 1px solid #ddd;
+}
 
-            div.test-list ul li:hover {
-                background-color: gold;
-                color: black;
-            }
+div.test-list ul li:hover {
+background-color: gold;
+color: black;
+}
 
-            div.test-list ul li:last-child {
-                border-bottom: none;
-            }
+div.test-list ul li:last-child {
+border-bottom: none;
+}
 
 </style>
-<div class="text-center">
-    <h1 class="display-4">Async Api Demo</h1>
-    <h2>@{ @Html.Raw(sDisplay) }</h2>
-    <div class="test-list">
-        Test the Api with Polly Timeouts
-        <ul>
-            <li><a href="/home/index?loopCount=35&maxTimeMs=1500">35 Loops, max 1.5 seconds</a></li>
-            <li><a href="/home/index?loopCount=35&maxTimeMs=1000">35 Loops, max 1 second</a></li>
-            <li><a href="/home/index?loopCount=35&maxTimeMs=500">35 Loops, max 1/2 second</a></li>
-        </ul>
-    </div>
-    <div>
-        <p>Source Code on <a href="https://github.com/markhazleton/AsyncTips">github.com/markhazleton/AsyncTips</a></p>
-    </div>
+
+
+<div class="container-fluid">
+<div class="row">
+<div class="col-md-12">
+<h1 class="display-4">Async Api Demo</h1>
+<h2>@{ @Html.Raw(sDisplay) }</h2>
 </div>
+</div>
+<div class="row">
+<div class="col-md-8">
+<div>
+<form class="form-horizontal" action="/" method="get">
+<fieldset>
+<!-- Form Name -->
+<legend>Submit Timeout Test</legend>
+<!-- Select Basic -->
+<div class="form-group">
+<label class="col-md-4 control-label" for="loopCount">Number of Loops</label>
+<div class="col-md-4">
+<select id="loopCount" name="loopCount" class="form-control">
+<option value="10">10</option>
+<option value="20">20</option>
+<option value="30">30</option>
+<option value="40">40</option>
+<option value="50">50</option>
+<option value="60">60</option>
+</select>
+</div>
+</div>
+<!-- Select Basic -->
+<div class="form-group">
+<label class="col-md-4 control-label" for="maxTimeMs">Max Response Time</label>
+<div class="col-md-4">
+<select id="maxTimeMs" name="maxTimeMs" class="form-control">
+<option value="100">100</option>
+<option value="200">200</option>
+<option value="400">400</option>
+<option value="800">800</option>
+<option value="1600">1600</option>
+<option value="3200">3200</option>
+</select>
+</div>
+</div>
+<!-- Button -->
+<div class="form-group">
+<label class="col-md-4 control-label" for="singlebutton">Submit Request</label>
+<div class="col-md-4">
+<button id="singlebutton" name="singlebutton" class="btn btn-primary">Submit Request</button>
+</div>
+</div>
+</fieldset>
+</form>
+</div>
+
+
+</div>
+<div class="col-md-4">
+<div class="text-center">
+<div class="test-list">
+Test the Api with Polly Timeouts
+<ul>
+<li><a href="/home/index?loopCount=35&maxTimeMs=1500">35 Loops, max 1.5 seconds</a></li>
+<li><a href="/home/index?loopCount=35&maxTimeMs=1000">35 Loops, max 1 second</a></li>
+<li><a href="/home/index?loopCount=35&maxTimeMs=500">35 Loops, max 1/2 second</a></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<p>Source Code on <a href="https://github.com/markhazleton/AsyncTips">github.com/markhazleton/AsyncTips</a></p>
+
+
