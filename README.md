@@ -28,6 +28,9 @@ Related Stack Overflow Question
 Blog post on surfacing retry count for diagnostics
 [https://www.stevejgordon.co.uk/polly-using-context-to-obtain-retry-count-diagnostics](https://www.stevejgordon.co.uk/polly-using-context-to-obtain-retry-count-diagnostics)
 
+Blog post on Polly Retry and Circuit Breaker Pattern
+[https://medium.com/@therealjordanlee/retry-circuit-breaker-patterns-in-c-with-polly-9aa24c5fe23a](https://medium.com/@therealjordanlee/retry-circuit-breaker-patterns-in-c-with-polly-9aa24c5fe23a)
+
 
 # Polly Project
 [http://www.thepollyproject.org/](http://www.thepollyproject.org/)
