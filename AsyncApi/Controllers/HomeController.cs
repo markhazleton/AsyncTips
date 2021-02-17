@@ -46,7 +46,7 @@ namespace AsyncApi.Controllers
 
 
             _httpIndexPolicy = HttpPolicyExtensions.HandleTransientHttpError()
-                .WaitAndRetryAsync(3, retryCount => TimeSpan.FromSeconds(Math.Pow(2, retryCount)),
+                .WaitAndRetryAsync(3, retryCount => TimeSpan.FromMilliseconds(retryCount),
                 onRetry: (response, delay, retryCount, context) =>
                 {
                     context[retryCountKey] = retryCount;
@@ -69,12 +69,71 @@ namespace AsyncApi.Controllers
         public IActionResult Error()
             { return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier }); }
 
+
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mockResult"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult> Create(MockResults mockResult)
+            {
+            if (mockResult != null)
+                {
+                // Start timing.
+                stopWatch.Reset();
+                stopWatch.Start();
+                string myResult = "<h1>Results</h1>";
+                client.BaseAddress = new Uri($"{Request.Scheme}://{Request.Host}{Request.PathBase}/api/"); ;
+                var context = new Context { { retryCountKey, 0 } };
+                HttpResponseMessage response = new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
+
+                try
+                    {
+                    response = await _httpIndexPolicy.ExecuteAsync(ctx => client.PostAsJsonAsync($"remote/Results", mockResult), context);
+                    if (response.IsSuccessStatusCode)
+                        {
+                        mockResult = await response.Content.ReadFromJsonAsync<MockResults>();
+                        }
+                    else
+                        {
+                        mockResult = new MockResults
+                            {
+                            Message = $"<br/>Remote Call Failed:{response.StatusCode}"
+                            };
+                        }
+                    myResult = $"{myResult} <br/><br/> Mock Result: {mockResult.Message } <br/>loops:{mockResult.LoopCount}<br/>max time:{mockResult.MaxTimeMS}<br/>run time:{mockResult.RunTimeMS}<br/><hr/>";
+                    }
+                catch (Exception ex)
+                    {
+                    myResult = $"{myResult} <br/><br/> {response.Content} <br/><br/> {ex.Message}";
+                    }
+
+                // Stop timing.
+                stopWatch.Stop();
+
+
+                object retries;
+                var finalRetryCount = context.TryGetValue(retryCountKey, out retries);
+
+
+                myResult = $"{myResult}<br/><strong>Retries:</strong>{retries ??= 0} <br/><strong>Total Elapsed Time: {stopWatch.Elapsed.TotalMilliseconds}</strong><br/>";
+
+                return View("Create", myResult);
+                }
+            return RedirectToAction("Create");
+            }
+
+
         /// <summary>
         /// Home Page
         /// </summary>
         /// <param name="loopCount"></param>
         /// <param name="maxTimeMs"></param>
         /// <returns></returns>
+        [HttpGet]
         public async Task<IActionResult> Index(int loopCount = 30, int maxTimeMs = 1500)
             {
             // Start timing.
@@ -82,16 +141,13 @@ namespace AsyncApi.Controllers
             stopWatch.Start();
             string myResult = "<h1>Results</h1>";
             client.BaseAddress = new Uri($"{Request.Scheme}://{Request.Host}{Request.PathBase}/api/"); ;
-
-            var context = new Polly.Context { { retryCountKey, 0 } };
-
-
-            MockResults mockResults;
+            var context = new Context { { retryCountKey, 0 } };
+            MockResults mockResults = new MockResults() { LoopCount = loopCount, MaxTimeMS = maxTimeMs };
             HttpResponseMessage response = new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
 
             try
                 {
-                response = await _httpIndexPolicy.ExecuteAsync(ctx => client.GetAsync($"remote/Results?loopCount={loopCount}&maxTimeMs={maxTimeMs}"), context);
+                response = await _httpIndexPolicy.ExecuteAsync(ctx => client.PostAsJsonAsync($"remote/Results", mockResults), context);
                 if (response.IsSuccessStatusCode)
                     {
                     mockResults = await response.Content.ReadFromJsonAsync<MockResults>();
@@ -103,11 +159,11 @@ namespace AsyncApi.Controllers
                         Message = $"<br/>Remote Call Failed:{response.StatusCode}"
                         };
                     }
-                myResult = $"{myResult} <br/><br/> Mock Result: {mockResults.Message } <br/>loops:{mockResults.LoopCount}<br/>max time:{mockResults.MaxTimeMS}<br/>run time:{mockResults.RunTimeMS}<br/><hr/>";
+                myResult = $"{myResult} <br/> Mock Result: {mockResults.Message } <br/>loops:{mockResults.LoopCount}<br/>max time:{mockResults.MaxTimeMS}<br/>run time:{mockResults.RunTimeMS}<br/>";
                 }
             catch (Exception ex)
                 {
-                myResult = $"{myResult} <br/><br/> {response.Content} <br/><br/> {ex.Message}";
+                myResult = $"{myResult} <br/> {response.Content} <br/> {ex.Message}";
                 }
 
             // Stop timing.

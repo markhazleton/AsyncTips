@@ -70,28 +70,26 @@ namespace AsyncApi.Controllers.api
 
 
         /// <summary>
-        /// Get Results
+        /// Post Results
         /// </summary>
-        /// <param name="loopCount"></param>
-        /// 
-        /// <param name="maxTimeMs"></param>
+        /// <param name="model">Instance of the requestModel</param>
         /// <returns></returns>
         /// <response code="200">Request Processed successfully.</response>
         /// <response code="200">Request Timeout.</response>
         [ProducesResponseType(typeof(MockResults), 200)]
         [ProducesResponseType(typeof(MockResults), 408)]
-        [HttpGet]
+        [HttpPost]
         [Route("Results")]
-        public async Task<IActionResult> GetResults(int loopCount, int maxTimeMs)
+        public async Task<IActionResult> GetResults(MockResults model)
             {
             Stopwatch watch = new Stopwatch();
             watch.Start();
 
-            MockResults myResult = new MockResults() { LoopCount = loopCount, MaxTimeMS = maxTimeMs, Message = "init" };
+            MockResults myResult = new MockResults() { LoopCount = model.LoopCount, MaxTimeMS = model.MaxTimeMS, Message = "init" };
             var listOfTasks = new List<Task>();
-            var task1 = MockResultsAsync(loopCount);
+            var task1 = MockResultsAsync(model.LoopCount);
             listOfTasks.Add(task1);
-            var taskResults = await Task.WhenAll(listOfTasks.Select(x => Task.WhenAny(x, Task.Delay(TimeSpan.FromMilliseconds(maxTimeMs)))));
+            var taskResults = await Task.WhenAll(listOfTasks.Select(x => Task.WhenAny(x, Task.Delay(TimeSpan.FromMilliseconds(model.MaxTimeMS)))));
             var succeedResults = taskResults.OfType<Task<MockResults>>().Select(s => s.Result).ToList();
 
             watch.Stop();
@@ -107,18 +105,5 @@ namespace AsyncApi.Controllers.api
             myResult.ResultValue = succeedResults.FirstOrDefault().ResultValue;
             return Ok(myResult);
             }
-
-
-
-
-
-
-
-
-
-
-
-
-
         }
     }

@@ -21,13 +21,11 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AsyncApi.Controllers.api.RemoteController.GetResults(System.Int32,System.Int32)">
+        <member name="M:AsyncApi.Controllers.api.RemoteController.GetResults(AsyncDemo.MockResults)">
             <summary>
-            Get Results
+            Post Results
             </summary>
-            <param name="loopCount"></param>
-            
-            <param name="maxTimeMs"></param>
+            <param name="model">Instance of the requestModel</param>
             <returns></returns>
             <response code="200">Request Processed successfully.</response>
             <response code="200">Request Timeout.</response>
@@ -47,6 +45,13 @@
             <summary>
             Home error page
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AsyncApi.Controllers.HomeController.Create(AsyncDemo.MockResults)">
+            <summary>
+            
+            </summary>
+            <param name="mockResult"></param>
             <returns></returns>
         </member>
         <member name="M:AsyncApi.Controllers.HomeController.Index(System.Int32,System.Int32)">
@@ -82,6 +87,21 @@
         <member name="P:AsyncApi.Models.ErrorViewModel.ShowRequestId">
             <summary>
             Show Request Id
+            </summary>
+        </member>
+        <member name="T:AsyncApi.Models.RequestModel">
+            <summary>
+            Request Model
+            </summary>
+        </member>
+        <member name="P:AsyncApi.Models.RequestModel.loopCount">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:AsyncApi.Models.RequestModel.maxTimeMs">
+            <summary>
+            
             </summary>
         </member>
         <member name="T:AsyncApi.Policies.PolicyContextItems">
