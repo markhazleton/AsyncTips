@@ -13,6 +13,10 @@ Another async blog post from John Thiriet
 Current Hosted at [https://asyncwebsample.azurewebsites.net/](https://asyncwebsample.azurewebsites.net/)
 # Other Links
 
+[https://devblogs.microsoft.com/pfxteam/await-and-ui-and-deadlocks-oh-my/?WT.mc_id=friends-0000-jamont](https://devblogs.microsoft.com/pfxteam/await-and-ui-and-deadlocks-oh-my/?WT.mc_id=friends-0000-jamont)
+
+[https://montemagno.com/c-sharp-developers-stop-calling-dot-result/](https://montemagno.com/c-sharp-developers-stop-calling-dot-result/)
+
 [https://codereview.stackexchange.com/questions/113108/async-task-with-timeout](https://codereview.stackexchange.com/questions/113108/async-task-with-timeout)
 
 Souce of CancelAsyncWithToken project:
