@@ -26,7 +26,7 @@ namespace AsyncApi.Controllers
         private readonly AsyncRetryPolicy<HttpResponseMessage> _httpIndexPolicy;
         private readonly AsyncRetryPolicy<HttpResponseMessage> _httpWeatherPolicy;
         private readonly ILogger<HomeController> _logger;
-        private readonly HttpClient client;
+        private readonly HttpClient _httpClient;
         private readonly Stopwatch stopWatch;
         private readonly Random jitter;
 
@@ -52,12 +52,12 @@ namespace AsyncApi.Controllers
                     context[retryCountKey] = retryCount;
                 });
 
-            client = new HttpClient();
+            _httpClient = new HttpClient();
 
             // How to get the base URL for the current web site
             // client.BaseAddress = new Uri(apiUrl);
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _httpClient.DefaultRequestHeaders.Accept.Clear();
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             stopWatch = new Stopwatch();
             }
 
@@ -86,13 +86,13 @@ namespace AsyncApi.Controllers
                 stopWatch.Reset();
                 stopWatch.Start();
                 string myResult = "<h1>Results</h1>";
-                client.BaseAddress = new Uri($"{Request.Scheme}://{Request.Host}{Request.PathBase}/api/"); ;
+                _httpClient.BaseAddress = new Uri($"{Request.Scheme}://{Request.Host}{Request.PathBase}/api/"); ;
                 var context = new Context { { retryCountKey, 0 } };
                 HttpResponseMessage response = new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
 
                 try
                     {
-                    response = await _httpIndexPolicy.ExecuteAsync(ctx => client.PostAsJsonAsync($"remote/Results", mockResult), context);
+                    response = await _httpIndexPolicy.ExecuteAsync(ctx => _httpClient.PostAsJsonAsync($"remote/Results", mockResult), context);
                     if (response.IsSuccessStatusCode)
                         {
                         mockResult = await response.Content.ReadFromJsonAsync<MockResults>();
@@ -140,14 +140,14 @@ namespace AsyncApi.Controllers
             stopWatch.Reset();
             stopWatch.Start();
             string myResult = "<h1>Results</h1>";
-            client.BaseAddress = new Uri($"{Request.Scheme}://{Request.Host}{Request.PathBase}/api/"); ;
+            _httpClient.BaseAddress = new Uri($"{Request.Scheme}://{Request.Host}{Request.PathBase}/api/"); ;
             var context = new Context { { retryCountKey, 0 } };
             MockResults mockResults = new MockResults() { LoopCount = loopCount, MaxTimeMS = maxTimeMs };
             HttpResponseMessage response = new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
 
             try
                 {
-                response = await _httpIndexPolicy.ExecuteAsync(ctx => client.PostAsJsonAsync($"remote/Results", mockResults), context);
+                response = await _httpIndexPolicy.ExecuteAsync(ctx => _httpClient.PostAsJsonAsync($"remote/Results", mockResults), context);
                 if (response.IsSuccessStatusCode)
                     {
                     mockResults = await response.Content.ReadFromJsonAsync<MockResults>();
@@ -189,7 +189,7 @@ namespace AsyncApi.Controllers
             stopWatch.Reset();
             stopWatch.Start();
             string myResult = "<h1>Results</h1>";
-            client.BaseAddress = new Uri($"{Request.Scheme}://{Request.Host}{Request.PathBase}/api/"); ;
+            _httpClient.BaseAddress = new Uri($"{Request.Scheme}://{Request.Host}{Request.PathBase}/api/"); ;
 
 
             HttpResponseMessage response = new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
@@ -197,7 +197,7 @@ namespace AsyncApi.Controllers
             List<WeatherForecast> resp;
             try
                 {
-                response = await _httpWeatherPolicy.ExecuteAsync(() => client.GetAsync($"remote/weather"));
+                response = await _httpWeatherPolicy.ExecuteAsync(() => _httpClient.GetAsync($"remote/weather"));
 
                 if (response.IsSuccessStatusCode)
                     {
@@ -218,6 +218,48 @@ namespace AsyncApi.Controllers
 
             return View("Weather", myResult);
             }
+
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> WeatherTimeout(int timeOutMs=100000)
+            {
+            stopWatch.Reset();
+            stopWatch.Start();
+            string myResult = "<h1>Results</h1>";
+            var response = new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
+            List<WeatherForecast> resp;
+            try
+                {
+                using var req = new HttpRequestMessage(HttpMethod.Get, $"{Request.Scheme}://{Request.Host}{Request.PathBase}/api/remote/weather");
+                using var cts = new System.Threading.CancellationTokenSource();
+                cts.CancelAfter(TimeSpan.FromMilliseconds(timeOutMs));
+                response = await _httpClient.SendAsync(req, cts.Token);
+
+                if (response.IsSuccessStatusCode)
+                    {
+                    resp = await response.Content.ReadFromJsonAsync<List<WeatherForecast>>();
+                    var forecast = resp.FirstOrDefault();
+                    myResult = $"{myResult} <br/><br/> Forecast for {forecast.Date.ToShortDateString() } is {forecast.Summary} ({forecast.TemperatureF} degrees)<br/><br/>";
+                    }
+                }
+            catch (Exception ex)
+                {
+                myResult = $"{myResult} <br/><br/> {response.Content} <br/><br/> {ex.Message}";
+                }
+
+            // Stop timing.
+            stopWatch.Stop();
+
+            myResult = $"{myResult} <br/><strong>Total Elapsed Time: {stopWatch.Elapsed.TotalMilliseconds}</strong><br/>";
+
+            return View("Weather", myResult);
+            }
+
+
 
         /// <summary>
         /// Privacy Page

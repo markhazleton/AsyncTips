@@ -68,6 +68,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:AsyncApi.Controllers.HomeController.WeatherTimeout(System.Int32)">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:AsyncApi.Controllers.HomeController.Privacy">
             <summary>
             Privacy Page
