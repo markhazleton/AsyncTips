@@ -30,6 +30,51 @@
             <response code="200">Request Processed successfully.</response>
             <response code="200">Request Timeout.</response>
         </member>
+        <member name="T:AsyncApi.Controllers.BaseController">
+            <summary>
+            Base Mvc Controller
+            </summary>
+        </member>
+        <member name="F:AsyncApi.Controllers.BaseController.retryCountKey">
+            <summary>
+            Retry Count
+            </summary>
+        </member>
+        <member name="F:AsyncApi.Controllers.BaseController._httpIndexPolicy">
+            <summary>
+            Index Policy
+            </summary>
+        </member>
+        <member name="F:AsyncApi.Controllers.BaseController._httpWeatherPolicy">
+            <summary>
+            Weather Policy
+            </summary>
+        </member>
+        <member name="F:AsyncApi.Controllers.BaseController._httpClient">
+            <summary>
+            Shared Http Client
+            </summary>
+        </member>
+        <member name="F:AsyncApi.Controllers.BaseController.stopWatch">
+            <summary>
+            Shared Stopwatch
+            </summary>
+        </member>
+        <member name="F:AsyncApi.Controllers.BaseController.jitter">
+            <summary>
+            Shared Jitter
+            </summary>
+        </member>
+        <member name="M:AsyncApi.Controllers.BaseController.#cctor">
+            <summary>
+            Static Base Constructor
+            </summary>
+        </member>
+        <member name="M:AsyncApi.Controllers.BaseController.#ctor">
+            <summary>
+            Base Controller Constructor
+            </summary>
+        </member>
         <member name="T:AsyncApi.Controllers.HomeController">
             <summary>
             Home MVC Controller
@@ -62,22 +107,64 @@
             <param name="maxTimeMs"></param>
             <returns></returns>
         </member>
-        <member name="M:AsyncApi.Controllers.HomeController.Weather">
+        <member name="M:AsyncApi.Controllers.HomeController.Privacy">
+            <summary>
+            Privacy Page
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:AsyncApi.Controllers.PollyController">
+            <summary>
+            Polly Controller
+            </summary>
+        </member>
+        <member name="M:AsyncApi.Controllers.PollyController.#ctor(Microsoft.Extensions.Logging.ILogger{AsyncApi.Controllers.PollyController})">
+             <summary>
+            
+             </summary>
+             <param name="logger"></param>
+        </member>
+        <member name="M:AsyncApi.Controllers.PollyController.Index(System.Int32,System.Int32)">
+            <summary>
+            Home Page
+            </summary>
+            <param name="loopCount"></param>
+            <param name="maxTimeMs"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AsyncApi.Controllers.WeatherController">
+            <summary>
+            Weather Controller
+            </summary>
+        </member>
+        <member name="M:AsyncApi.Controllers.WeatherController.#ctor(Microsoft.Extensions.Logging.ILogger{AsyncApi.Controllers.WeatherController})">
+             <summary>
+            
+             </summary>
+             <param name="logger"></param>
+        </member>
+        <member name="M:AsyncApi.Controllers.WeatherController.Index(System.Int32)">
             <summary>
             Weather
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AsyncApi.Controllers.HomeController.WeatherTimeout(System.Int32)">
+        <member name="T:AsyncApi.HttpContextExtensions">
             <summary>
-            
+            HttpContextExtensions
             </summary>
-            <returns></returns>
         </member>
-        <member name="M:AsyncApi.Controllers.HomeController.Privacy">
+        <member name="M:AsyncApi.HttpContextExtensions.AddHttpContextAccessor(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
-            Privacy Page
+            AddHttpContextAccessor
             </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:AsyncApi.HttpContextExtensions.UseHttpContext(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            UseHttpContext
+            </summary>
+            <param name="app"></param>
             <returns></returns>
         </member>
         <member name="T:AsyncApi.Models.ErrorViewModel">
@@ -108,6 +195,21 @@
         <member name="P:AsyncApi.Models.RequestModel.maxTimeMs">
             <summary>
             
+            </summary>
+        </member>
+        <member name="T:AsyncApi.MyHttpContext">
+            <summary>
+            MyHttpContext
+            </summary>
+        </member>
+        <member name="P:AsyncApi.MyHttpContext.Current">
+            <summary>
+            Current Context
+            </summary>
+        </member>
+        <member name="P:AsyncApi.MyHttpContext.AppBaseUrl">
+            <summary>
+             AppBaseUrl
             </summary>
         </member>
         <member name="T:AsyncApi.Policies.PolicyContextItems">
@@ -185,42 +287,9 @@
             <param name="args"></param>
             <returns></returns>
         </member>
-        <member name="T:AsyncApi.MyHttpContext">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:AsyncApi.MyHttpContext.Current">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:AsyncApi.MyHttpContext.AppBaseUrl">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="T:AsyncApi.HttpContextExtensions">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:AsyncApi.HttpContextExtensions.AddHttpContextAccessor(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
-            <summary>
-            
-            </summary>
-            <param name="services"></param>
-        </member>
-        <member name="M:AsyncApi.HttpContextExtensions.UseHttpContext(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
-            <summary>
-            
-            </summary>
-            <param name="app"></param>
-            <returns></returns>
-        </member>
         <member name="T:AsyncApi.Startup">
             <summary>
-            
+            Startup 
             </summary>
         </member>
         <member name="P:AsyncApi.Startup.Configuration">

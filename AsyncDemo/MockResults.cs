@@ -18,7 +18,7 @@
         /// <summary>
         ///
         /// </summary>
-        public int RunTimeMS { get; set; }
+        public long RunTimeMS { get; set; }
 
         /// <summary>
         ///

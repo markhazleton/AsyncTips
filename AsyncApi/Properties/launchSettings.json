@@ -12,11 +12,11 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "swagger",
       "environmentVariables": {
         "VaultUri": "https://mwhsamplewebapivault.vault.azure.net/",
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "use64Bit": true
     },
     "AsyncApi": {
       "commandName": "Project",

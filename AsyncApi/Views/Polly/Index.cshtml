@@ -1,22 +1,32 @@
 ﻿@model AsyncDemo.MockResults
 @{
-    string sDisplay = "";
-
-    if (Model == null)
-        sDisplay = "Model Was Null";
-
-    ViewData["Title"] = "Async Api Demo Home Page";
+    ViewData["Title"] = "Async Api Polly Page";
 }
+
+
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <h1 class="display-4">Async Api Demo</h1>
-            <h2>@{ @Html.Raw(sDisplay) }</h2>
+            <h1 class="display-4">Polly Async Api Demo</h1>
         </div>
     </div>
     <div class="row">
         <div class="col-md-8">
+
+            <dl>
+                <dt>Loop Count</dt>
+                <dd>@Model.LoopCount</dd>
+                <dt>Max Time (ms)</dt>
+                <dd>@Model.MaxTimeMS</dd>
+                <dt>Result</dt>
+                <dd>@Model.ResultValue</dd>
+                <dt>RunTime (ms)</dt>
+                <dd>@Model.RunTimeMS</dd>
+                <dt>Message</dt>
+                <dd>@Model.Message</dd>
+            </dl>
+
             <div>
                 <form class="form-horizontal" action="/polly" method="get">
                     <fieldset>
@@ -60,6 +70,8 @@
                     </fieldset>
                 </form>
             </div>
+
+
         </div>
         <div class="col-md-4">
             <div class="text-center">
