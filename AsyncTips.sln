@@ -10,11 +10,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CancelAsyncWithToken", "Can
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncApi", "AsyncApi\AsyncApi.csproj", "{185A17F0-AE6E-4203-B64D-622D5DA48161}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncDemo.Tests", "AsyncDemo.Tests\AsyncDemo.Tests.csproj", "{AC5C73B0-C85F-472B-8612-7CC23051592C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncDemo.Tests", "AsyncDemo.Tests\AsyncDemo.Tests.csproj", "{AC5C73B0-C85F-472B-8612-7CC23051592C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EA97752A-8089-4AF9-9F55-BC0314585068}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{D2659C57-1A80-4496-AE48-DFDD8A2785AC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{91AF1314-DCF3-46BA-9BCD-249A47E3075A}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
