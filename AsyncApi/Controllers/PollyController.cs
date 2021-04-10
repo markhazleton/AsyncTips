@@ -9,12 +9,12 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace AsyncApi.Controllers
-    {
+{
     /// <summary>
     /// Polly Controller
     /// </summary>
     public class PollyController : BaseController
-        {
+    {
         private readonly ILogger<PollyController> _logger;
 
         /// <summary>
@@ -22,9 +22,9 @@ namespace AsyncApi.Controllers
         /// </summary>
         /// <param name="logger"></param>
         public PollyController(ILogger<PollyController> logger)
-            {
+        {
             _logger = logger;
-            }
+        }
 
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace AsyncApi.Controllers
         /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Index(int loopCount = 30, int maxTimeMs = 1500)
-            {
+        {
             // Start timing.
             stopWatch.Reset();
             stopWatch.Start();
@@ -45,22 +45,22 @@ namespace AsyncApi.Controllers
             HttpResponseMessage response = new(System.Net.HttpStatusCode.InternalServerError);
 
             try
-                {
+            {
                 response = await _httpIndexPolicy.ExecuteAsync(ctx => _httpClient.PostAsJsonAsync($"remote/Results", mockResults), context);
                 if (response.IsSuccessStatusCode)
-                    {
+                {
                     mockResults = await response.Content.ReadFromJsonAsync<MockResults>();
-                    }
+                }
                 else
-                    {
+                {
                     mockResults.ResultValue = $"{response.StatusCode}";
                     mockResults.Message = $"{response.Content}";
-                    }
                 }
+            }
             catch (Exception ex)
-                {
+            {
                 mockResults.Message = $"Error:{ex.Message}";
-                }
+            }
 
             // Stop timing.
             stopWatch.Stop();
@@ -68,10 +68,10 @@ namespace AsyncApi.Controllers
             object retries;
             var finalRetryCount = context.TryGetValue(retryCountKey, out retries);
 
-            if ((int)retries >0)
+            if ((int)retries > 0)
                 mockResults.Message = $"{mockResults.Message} - retries:{retries}";
 
             return View("Index", mockResults);
-            }
         }
     }
+}

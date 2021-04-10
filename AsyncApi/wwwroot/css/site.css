@@ -80,19 +80,19 @@ div.test-list ul {
     border: 1px solid #ddd;
 }
 
-div.test-list ul li {
-    padding: 4px 8px;
-    border-bottom: 1px solid #ddd;
-}
-
-    div.test-list ul li:hover {
-        background-color: gold;
-        color: black;
+    div.test-list ul li {
+        padding: 4px 8px;
+        border-bottom: 1px solid #ddd;
     }
 
-    div.test-list ul li:last-child {
-        border-bottom: none;
-    }
+        div.test-list ul li:hover {
+            background-color: gold;
+            color: black;
+        }
+
+        div.test-list ul li:last-child {
+            border-bottom: none;
+        }
 
 dl {
     display: flex;
@@ -116,4 +116,3 @@ dd {
     padding: 2px 4px;
     border-bottom: 1px solid #333;
 }
-

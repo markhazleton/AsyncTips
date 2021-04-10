@@ -35,7 +35,6 @@ namespace AsyncDemo
 
                     // Do something that takes times.
                     Thread.Sleep(i);
-
                     result += i;
                 }
                 return result;

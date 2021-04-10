@@ -207,6 +207,12 @@
             Current Context
             </summary>
         </member>
+        <member name="P:AsyncApi.MyHttpContext.Version">
+            <summary>
+            My Test
+            </summary>
+            <returns></returns>
+        </member>
         <member name="P:AsyncApi.MyHttpContext.AppBaseUrl">
             <summary>
              AppBaseUrl

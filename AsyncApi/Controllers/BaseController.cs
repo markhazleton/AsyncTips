@@ -8,12 +8,12 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 
 namespace AsyncApi.Controllers
-    {
+{
     /// <summary>
     /// Base Mvc Controller
     /// </summary>
     public class BaseController : Controller
-        {
+    {
         /// <summary>
         /// Retry Count
         /// </summary>
@@ -45,16 +45,16 @@ namespace AsyncApi.Controllers
         /// Static Base Constructor
         /// </summary>
         static BaseController()
-            {
+        {
             stopWatch = new Stopwatch();
             jitter = new Random();
-            }
+        }
 
         /// <summary>
         /// Base Controller Constructor
         /// </summary>
         public BaseController()
-            {
+        {
             _httpClient = new HttpClient();
             _httpClient.DefaultRequestHeaders.Accept.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -69,6 +69,6 @@ namespace AsyncApi.Controllers
                 {
                     context[retryCountKey] = retryCount;
                 });
-            }
         }
     }
+}

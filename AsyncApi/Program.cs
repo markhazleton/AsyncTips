@@ -5,20 +5,20 @@ using Microsoft.Extensions.Hosting;
 using System;
 
 namespace AsyncApi
-    {
+{
     /// <summary>
     /// Program
     /// </summary>
     public class Program
-        {
+    {
         /// <summary>
         /// Main
         /// </summary>
         /// <param name="args"></param>
         public static void Main(string[] args)
-            {
+        {
             CreateHostBuilder(args).Build().Run();
-            }
+        }
 
         /// <summary>
         /// Create Host Builder
@@ -37,5 +37,5 @@ namespace AsyncApi
             {
                 webBuilder.UseStartup<Startup>();
             });
-        }
     }
+}

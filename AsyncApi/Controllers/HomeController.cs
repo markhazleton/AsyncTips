@@ -11,12 +11,12 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace AsyncApi.Controllers
-    {
+{
     /// <summary>
     /// Home MVC Controller
     /// </summary>
     public class HomeController : BaseController
-        {
+    {
         private readonly ILogger<HomeController> _logger;
 
         /// <summary>
@@ -24,9 +24,9 @@ namespace AsyncApi.Controllers
         /// </summary>
         /// <param name="logger"></param>
         public HomeController(ILogger<HomeController> logger)
-            {
+        {
             _logger = logger;
-            }
+        }
 
         /// <summary>
         /// Home error page
@@ -34,7 +34,7 @@ namespace AsyncApi.Controllers
         /// <returns></returns>
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
-            { return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier }); }
+        { return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier }); }
 
         /// <summary>
         /// 
@@ -43,9 +43,9 @@ namespace AsyncApi.Controllers
         /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult> Create(MockResults mockResult)
-            {
+        {
             if (mockResult != null)
-                {
+            {
                 // Start timing.
                 stopWatch.Reset();
                 stopWatch.Start();
@@ -55,25 +55,25 @@ namespace AsyncApi.Controllers
                 HttpResponseMessage response = new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
 
                 try
-                    {
+                {
                     response = await _httpIndexPolicy.ExecuteAsync(ctx => _httpClient.PostAsJsonAsync($"remote/Results", mockResult), context);
                     if (response.IsSuccessStatusCode)
-                        {
-                        mockResult = await response.Content.ReadFromJsonAsync<MockResults>();
-                        }
-                    else
-                        {
-                        mockResult = new MockResults
-                            {
-                            Message = $"<br/>Remote Call Failed:{response.StatusCode}"
-                            };
-                        }
-                    myResult = $"{myResult} <br/><br/> Mock Result: {mockResult.Message } <br/>loops:{mockResult.LoopCount}<br/>max time:{mockResult.MaxTimeMS}<br/>run time:{mockResult.RunTimeMS}<br/><hr/>";
-                    }
-                catch (Exception ex)
                     {
-                    myResult = $"{myResult} <br/><br/> {response.Content} <br/><br/> {ex.Message}";
+                        mockResult = await response.Content.ReadFromJsonAsync<MockResults>();
                     }
+                    else
+                    {
+                        mockResult = new MockResults
+                        {
+                            Message = $"<br/>Remote Call Failed:{response.StatusCode}"
+                        };
+                    }
+                    myResult = $"{myResult} <br/><br/> Mock Result: {mockResult.Message } <br/>loops:{mockResult.LoopCount}<br/>max time:{mockResult.MaxTimeMS}<br/>run time:{mockResult.RunTimeMS}<br/><hr/>";
+                }
+                catch (Exception ex)
+                {
+                    myResult = $"{myResult} <br/><br/> {response.Content} <br/><br/> {ex.Message}";
+                }
 
                 // Stop timing.
                 stopWatch.Stop();
@@ -86,9 +86,9 @@ namespace AsyncApi.Controllers
                 myResult = $"{myResult}<br/><strong>Retries:</strong>{retries ??= 0} <br/><strong>Total Elapsed Time: {stopWatch.Elapsed.TotalMilliseconds}</strong><br/>";
 
                 return View("Create", myResult);
-                }
-            return RedirectToAction("Create");
             }
+            return RedirectToAction("Create");
+        }
 
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace AsyncApi.Controllers
         /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Index(int loopCount = 30, int maxTimeMs = 1500)
-            {
+        {
             // Start timing.
             stopWatch.Reset();
             stopWatch.Start();
@@ -109,21 +109,21 @@ namespace AsyncApi.Controllers
             HttpResponseMessage response = new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
 
             try
-                {
+            {
                 response = await _httpIndexPolicy.ExecuteAsync(ctx => _httpClient.PostAsJsonAsync($"remote/Results", mockResults), context);
                 if (response.IsSuccessStatusCode)
-                    {
-                    mockResults = await response.Content.ReadFromJsonAsync<MockResults>();
-                    }
-                else
-                    {
-                    mockResults.Message = $"<br/>Remote Call Failed:{response.StatusCode}";
-                    }
-                }
-            catch (Exception ex)
                 {
-                mockResults.Message = ex.Message;
+                    mockResults = await response.Content.ReadFromJsonAsync<MockResults>();
                 }
+                else
+                {
+                    mockResults.Message = $"<br/>Remote Call Failed:{response.StatusCode}";
+                }
+            }
+            catch (Exception ex)
+            {
+                mockResults.Message = ex.Message;
+            }
 
             // Stop timing.
             stopWatch.Stop();
@@ -133,7 +133,7 @@ namespace AsyncApi.Controllers
             var finalRetryCount = context.TryGetValue(retryCountKey, out retries);
 
             return View("Index", mockResults);
-            }
+        }
 
 
 
@@ -142,5 +142,5 @@ namespace AsyncApi.Controllers
         /// </summary>
         /// <returns></returns>
         public IActionResult Privacy() { return View(); }
-        }
     }
+}

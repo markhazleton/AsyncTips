@@ -7,12 +7,12 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
 namespace AsyncApi
-    {
+{
     /// <summary>
     /// Startup 
     /// </summary>
     public class Startup
-        {
+    {
         /// <summary>
         /// 
         /// </summary>
@@ -22,16 +22,16 @@ namespace AsyncApi
         /// </summary>
         /// <param name="configuration"></param>
         public Startup(IConfiguration configuration)
-            {
+        {
             Configuration = configuration;
-            }
+        }
 
         /// <summary>
         /// This method gets called by the runtime. Use this method to add services to the container.
         /// </summary>
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
-            {
+        {
             // Add framework services.
 
             services.AddSwaggerGen(c =>
@@ -44,7 +44,7 @@ namespace AsyncApi
                 .AddHttpClient()
                 .AddMvc(options => options.EnableEndpointRouting = false);
             services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
-            }
+        }
 
         /// <summary>
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,7 +52,7 @@ namespace AsyncApi
         /// <param name="app"></param>
         /// <param name="env"></param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-            {
+        {
             app.UseMvc(routes =>
               {
                   routes.MapRoute(
@@ -61,24 +61,24 @@ namespace AsyncApi
               });
 
             if (env.IsDevelopment())
-                {
+            {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger(c=>
+                app.UseSwagger(c =>
                 {
 
                     c.RouteTemplate = "api-docs/{documentName}/swagger.json";
                 });
-                app.UseSwaggerUI(c => 
+                app.UseSwaggerUI(c =>
                 {
                     c.RoutePrefix = "api-docs";
                     c.InjectStylesheet("/swagger-ui/custom.css");
-                    c.SwaggerEndpoint("/api-docs/v1/swagger.json", "AsyncApi v1"); 
+                    c.SwaggerEndpoint("/api-docs/v1/swagger.json", "AsyncApi v1");
                 });
-                }
+            }
             else
-                {
+            {
                 app.UseExceptionHandler("/Home/Error");
-                }
+            }
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -88,6 +88,6 @@ namespace AsyncApi
             {
                 endpoints.MapControllers();
             });
-            }
         }
     }
+}

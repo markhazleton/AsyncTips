@@ -1,10 +1,10 @@
 namespace AsyncApi.Models
-    {
+{
     /// <summary>
     /// Request Model
     /// </summary>
     public class RequestModel
-        {
+    {
         /// <summary>
         /// 
         /// </summary>
@@ -13,5 +13,5 @@ namespace AsyncApi.Models
         /// 
         /// </summary>
         public int maxTimeMs { get; set; }
-        }
     }
+}
