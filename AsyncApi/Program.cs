@@ -1,6 +1,4 @@
-using Azure.Identity;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using System;
 
@@ -11,14 +9,6 @@ namespace AsyncApi
     /// </summary>
     public class Program
     {
-        /// <summary>
-        /// Main
-        /// </summary>
-        /// <param name="args"></param>
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
 
         /// <summary>
         /// Create Host Builder
@@ -27,15 +17,17 @@ namespace AsyncApi
         /// <returns></returns>
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-            .ConfigureAppConfiguration((context, config) =>
-            {
-                var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("VaultUri"));
-                config.AddAzureKeyVault(
-                    keyVaultEndpoint,
-                    new DefaultAzureCredential());
-            }).ConfigureWebHostDefaults(webBuilder =>
+            .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();
             });
+        /// <summary>
+        /// Main
+        /// </summary>
+        /// <param name="args"></param>
+        public static void Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
     }
 }

@@ -280,18 +280,18 @@
             Program
             </summary>
         </member>
-        <member name="M:AsyncApi.Program.Main(System.String[])">
-            <summary>
-            Main
-            </summary>
-            <param name="args"></param>
-        </member>
         <member name="M:AsyncApi.Program.CreateHostBuilder(System.String[])">
             <summary>
             Create Host Builder
             </summary>
             <param name="args"></param>
             <returns></returns>
+        </member>
+        <member name="M:AsyncApi.Program.Main(System.String[])">
+            <summary>
+            Main
+            </summary>
+            <param name="args"></param>
         </member>
         <member name="T:AsyncApi.Startup">
             <summary>
