@@ -43,6 +43,7 @@ namespace AsyncApi
                 .AddPollyPolicies()
                 .AddHttpClient()
                 .AddMvc(options => options.EnableEndpointRouting = false);
+            services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
         }
 
         /// <summary>
