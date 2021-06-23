@@ -29,9 +29,6 @@
   <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="wwwroot\images\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\favicon.ico" />
     <None Include="wwwroot\swagger-ui\custom.css" />
   </ItemGroup>

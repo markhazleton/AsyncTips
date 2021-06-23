@@ -32,15 +32,15 @@ const CLASS_NAME_SHOW = 'show'
 const CLASS_NAME_SHOWING = 'showing'
 
 const DefaultType = {
-    animation: 'boolean',
-    autohide: 'boolean',
-    delay: 'number'
+  animation: 'boolean',
+  autohide: 'boolean',
+  delay: 'number'
 }
 
 const Default = {
-    animation: true,
-    autohide: true,
-    delay: 500
+  animation: true,
+  autohide: true,
+  delay: 500
 }
 
 const SELECTOR_DATA_DISMISS = '[data-dismiss="toast"]'
@@ -52,166 +52,166 @@ const SELECTOR_DATA_DISMISS = '[data-dismiss="toast"]'
  */
 
 class Toast {
-    constructor(element, config) {
-        this._element = element
-        this._config = this._getConfig(config)
-        this._timeout = null
-        this._setListeners()
+  constructor(element, config) {
+    this._element = element
+    this._config = this._getConfig(config)
+    this._timeout = null
+    this._setListeners()
+  }
+
+  // Getters
+
+  static get VERSION() {
+    return VERSION
+  }
+
+  static get DefaultType() {
+    return DefaultType
+  }
+
+  static get Default() {
+    return Default
+  }
+
+  // Public
+
+  show() {
+    const showEvent = $.Event(EVENT_SHOW)
+
+    $(this._element).trigger(showEvent)
+    if (showEvent.isDefaultPrevented()) {
+      return
     }
 
-    // Getters
+    this._clearTimeout()
 
-    static get VERSION() {
-        return VERSION
+    if (this._config.animation) {
+      this._element.classList.add(CLASS_NAME_FADE)
     }
 
-    static get DefaultType() {
-        return DefaultType
+    const complete = () => {
+      this._element.classList.remove(CLASS_NAME_SHOWING)
+      this._element.classList.add(CLASS_NAME_SHOW)
+
+      $(this._element).trigger(EVENT_SHOWN)
+
+      if (this._config.autohide) {
+        this._timeout = setTimeout(() => {
+          this.hide()
+        }, this._config.delay)
+      }
     }
 
-    static get Default() {
-        return Default
+    this._element.classList.remove(CLASS_NAME_HIDE)
+    Util.reflow(this._element)
+    this._element.classList.add(CLASS_NAME_SHOWING)
+    if (this._config.animation) {
+      const transitionDuration = Util.getTransitionDurationFromElement(this._element)
+
+      $(this._element)
+        .one(Util.TRANSITION_END, complete)
+        .emulateTransitionEnd(transitionDuration)
+    } else {
+      complete()
+    }
+  }
+
+  hide() {
+    if (!this._element.classList.contains(CLASS_NAME_SHOW)) {
+      return
     }
 
-    // Public
+    const hideEvent = $.Event(EVENT_HIDE)
 
-    show() {
-        const showEvent = $.Event(EVENT_SHOW)
+    $(this._element).trigger(hideEvent)
+    if (hideEvent.isDefaultPrevented()) {
+      return
+    }
 
-        $(this._element).trigger(showEvent)
-        if (showEvent.isDefaultPrevented()) {
-            return
+    this._close()
+  }
+
+  dispose() {
+    this._clearTimeout()
+
+    if (this._element.classList.contains(CLASS_NAME_SHOW)) {
+      this._element.classList.remove(CLASS_NAME_SHOW)
+    }
+
+    $(this._element).off(EVENT_CLICK_DISMISS)
+
+    $.removeData(this._element, DATA_KEY)
+    this._element = null
+    this._config = null
+  }
+
+  // Private
+
+  _getConfig(config) {
+    config = {
+      ...Default,
+      ...$(this._element).data(),
+      ...(typeof config === 'object' && config ? config : {})
+    }
+
+    Util.typeCheckConfig(
+      NAME,
+      config,
+      this.constructor.DefaultType
+    )
+
+    return config
+  }
+
+  _setListeners() {
+    $(this._element).on(EVENT_CLICK_DISMISS, SELECTOR_DATA_DISMISS, () => this.hide())
+  }
+
+  _close() {
+    const complete = () => {
+      this._element.classList.add(CLASS_NAME_HIDE)
+      $(this._element).trigger(EVENT_HIDDEN)
+    }
+
+    this._element.classList.remove(CLASS_NAME_SHOW)
+    if (this._config.animation) {
+      const transitionDuration = Util.getTransitionDurationFromElement(this._element)
+
+      $(this._element)
+        .one(Util.TRANSITION_END, complete)
+        .emulateTransitionEnd(transitionDuration)
+    } else {
+      complete()
+    }
+  }
+
+  _clearTimeout() {
+    clearTimeout(this._timeout)
+    this._timeout = null
+  }
+
+  // Static
+
+  static _jQueryInterface(config) {
+    return this.each(function () {
+      const $element = $(this)
+      let data = $element.data(DATA_KEY)
+      const _config = typeof config === 'object' && config
+
+      if (!data) {
+        data = new Toast(this, _config)
+        $element.data(DATA_KEY, data)
+      }
+
+      if (typeof config === 'string') {
+        if (typeof data[config] === 'undefined') {
+          throw new TypeError(`No method named "${config}"`)
         }
 
-        this._clearTimeout()
-
-        if (this._config.animation) {
-            this._element.classList.add(CLASS_NAME_FADE)
-        }
-
-        const complete = () => {
-            this._element.classList.remove(CLASS_NAME_SHOWING)
-            this._element.classList.add(CLASS_NAME_SHOW)
-
-            $(this._element).trigger(EVENT_SHOWN)
-
-            if (this._config.autohide) {
-                this._timeout = setTimeout(() => {
-                    this.hide()
-                }, this._config.delay)
-            }
-        }
-
-        this._element.classList.remove(CLASS_NAME_HIDE)
-        Util.reflow(this._element)
-        this._element.classList.add(CLASS_NAME_SHOWING)
-        if (this._config.animation) {
-            const transitionDuration = Util.getTransitionDurationFromElement(this._element)
-
-            $(this._element)
-                .one(Util.TRANSITION_END, complete)
-                .emulateTransitionEnd(transitionDuration)
-        } else {
-            complete()
-        }
-    }
-
-    hide() {
-        if (!this._element.classList.contains(CLASS_NAME_SHOW)) {
-            return
-        }
-
-        const hideEvent = $.Event(EVENT_HIDE)
-
-        $(this._element).trigger(hideEvent)
-        if (hideEvent.isDefaultPrevented()) {
-            return
-        }
-
-        this._close()
-    }
-
-    dispose() {
-        this._clearTimeout()
-
-        if (this._element.classList.contains(CLASS_NAME_SHOW)) {
-            this._element.classList.remove(CLASS_NAME_SHOW)
-        }
-
-        $(this._element).off(EVENT_CLICK_DISMISS)
-
-        $.removeData(this._element, DATA_KEY)
-        this._element = null
-        this._config = null
-    }
-
-    // Private
-
-    _getConfig(config) {
-        config = {
-            ...Default,
-            ...$(this._element).data(),
-            ...(typeof config === 'object' && config ? config : {})
-        }
-
-        Util.typeCheckConfig(
-            NAME,
-            config,
-            this.constructor.DefaultType
-        )
-
-        return config
-    }
-
-    _setListeners() {
-        $(this._element).on(EVENT_CLICK_DISMISS, SELECTOR_DATA_DISMISS, () => this.hide())
-    }
-
-    _close() {
-        const complete = () => {
-            this._element.classList.add(CLASS_NAME_HIDE)
-            $(this._element).trigger(EVENT_HIDDEN)
-        }
-
-        this._element.classList.remove(CLASS_NAME_SHOW)
-        if (this._config.animation) {
-            const transitionDuration = Util.getTransitionDurationFromElement(this._element)
-
-            $(this._element)
-                .one(Util.TRANSITION_END, complete)
-                .emulateTransitionEnd(transitionDuration)
-        } else {
-            complete()
-        }
-    }
-
-    _clearTimeout() {
-        clearTimeout(this._timeout)
-        this._timeout = null
-    }
-
-    // Static
-
-    static _jQueryInterface(config) {
-        return this.each(function () {
-            const $element = $(this)
-            let data = $element.data(DATA_KEY)
-            const _config = typeof config === 'object' && config
-
-            if (!data) {
-                data = new Toast(this, _config)
-                $element.data(DATA_KEY, data)
-            }
-
-            if (typeof config === 'string') {
-                if (typeof data[config] === 'undefined') {
-                    throw new TypeError(`No method named "${config}"`)
-                }
-
-                data[config](this)
-            }
-        })
-    }
+        data[config](this)
+      }
+    })
+  }
 }
 
 /**
@@ -223,8 +223,8 @@ class Toast {
 $.fn[NAME] = Toast._jQueryInterface
 $.fn[NAME].Constructor = Toast
 $.fn[NAME].noConflict = () => {
-    $.fn[NAME] = JQUERY_NO_CONFLICT
-    return Toast._jQueryInterface
+  $.fn[NAME] = JQUERY_NO_CONFLICT
+  return Toast._jQueryInterface
 }
 
 export default Toast
