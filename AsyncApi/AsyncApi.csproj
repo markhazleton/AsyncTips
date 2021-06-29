@@ -3,11 +3,10 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-    <UserSecretsId>13e79f72-80ab-4395-87d5-303044ad358e</UserSecretsId>
-    <ApplicationInsightsResourceId>/subscriptions/99d8f664-6f80-4f58-b376-6f8fa975cc8a/resourceGroups/MwhSample/providers/microsoft.insights/components/MwhSample</ApplicationInsightsResourceId>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Deterministic>false</Deterministic>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
+    <UserSecretsId>a23f14cc-bd46-4463-86c3-fbc046450ccd</UserSecretsId>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -20,8 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.15.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="Polly" Version="7.2.2" />
     <PackageReference Include="Polly.Extensions.Http" Version="3.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />

@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30323.103
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31423.177
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncTips", "AsyncTips\AsyncTips.csproj", "{5ADC9AEF-862C-46EC-8C19-AB4C553FB6EB}"
 EndProject
@@ -11,10 +11,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncApi", "AsyncApi\AsyncApi.csproj", "{185A17F0-AE6E-4203-B64D-622D5DA48161}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncDemo.Tests", "AsyncDemo.Tests\AsyncDemo.Tests.csproj", "{AC5C73B0-C85F-472B-8612-7CC23051592C}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EA97752A-8089-4AF9-9F55-BC0314585068}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{D2659C57-1A80-4496-AE48-DFDD8A2785AC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{91AF1314-DCF3-46BA-9BCD-249A47E3075A}"
 	ProjectSection(SolutionItems) = preProject
@@ -50,10 +46,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{D1739A95-6AD3-4EB4-8C49-5785B107CD02} = {D2659C57-1A80-4496-AE48-DFDD8A2785AC}
-		{AC5C73B0-C85F-472B-8612-7CC23051592C} = {EA97752A-8089-4AF9-9F55-BC0314585068}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E1FC5BB7-96DB-4B50-B405-1E8686CD2777}
